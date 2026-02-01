@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { GraduationCap, Menu } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export function Header() {
@@ -7,8 +7,8 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center space-x-2">
-          <GraduationCap className="h-8 w-8 text-primary" />
-          <span className="text-xl font-bold">CourseHub</span>
+          <span className="text-2xl">🐞</span>
+          <span className="text-xl font-bold">CourseBug</span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">

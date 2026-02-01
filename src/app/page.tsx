@@ -7,10 +7,8 @@ export default function Home() {
       <header className="border-b bg-white/95 backdrop-blur">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded bg-blue-600 flex items-center justify-center">
-              <span className="text-white font-bold">C</span>
-            </div>
-            <span className="text-xl font-bold">CourseHub</span>
+            <span className="text-2xl">🐞</span>
+            <span className="text-xl font-bold">CourseBug</span>
           </Link>
           
           <nav className="hidden md:flex items-center space-x-6">
@@ -219,7 +217,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-semibold mb-4">CourseHub</h3>
+              <h3 className="text-lg font-semibold mb-4">CourseBug</h3>
               <p className="text-gray-300">Empowering professionals with digital skills training and certification programs.</p>
             </div>
             
@@ -244,7 +242,7 @@ export default function Home() {
             <div>
               <h4 className="font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-gray-300">
-                <li>Email: info@coursehub.com</li>
+                <li>Email: info@coursebug.com</li>
                 <li>Phone: (555) 123-4567</li>
                 <li>Support: Monday - Friday</li>
               </ul>
@@ -252,7 +250,7 @@ export default function Home() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
-            <p>&copy; 2024 CourseHub. All rights reserved.</p>
+            <p>&copy; 2024 CourseBug. All rights reserved.</p>
           </div>
         </div>
       </footer>
