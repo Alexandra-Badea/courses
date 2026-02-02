@@ -1,6 +1,12 @@
+'use client'
+
 import Link from 'next/link'
+import { useLanguage } from '@/contexts/language-context'
+import { LanguageSwitcher } from '@/components/language-switcher'
 
 export default function Home() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Header */}
@@ -12,15 +18,18 @@ export default function Home() {
           </Link>
           
           <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/" className="text-sm font-medium hover:text-blue-600">Home</Link>
-            <Link href="/courses" className="text-sm font-medium hover:text-blue-600">Courses</Link>
-            <Link href="/about" className="text-sm font-medium hover:text-blue-600">About</Link>
-            <Link href="/contact" className="text-sm font-medium hover:text-blue-600">Contact</Link>
+            <Link href="/" className="text-sm font-medium hover:text-blue-600">{t('home')}</Link>
+            <Link href="/courses" className="text-sm font-medium hover:text-blue-600">{t('courses')}</Link>
+            <Link href="/about" className="text-sm font-medium hover:text-blue-600">{t('about')}</Link>
+            <Link href="/contact" className="text-sm font-medium hover:text-blue-600">{t('contact')}</Link>
           </nav>
           
-          <Link href="/courses" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
-            Browse Courses
-          </Link>
+          <div className="flex items-center gap-4">
+            <LanguageSwitcher />
+            <Link href="/courses" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 hidden sm:inline-flex">
+              {t('browseCourses')}
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -29,41 +38,40 @@ export default function Home() {
         <div className="container mx-auto text-center max-w-4xl">
           <div className="mb-8">
             <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
-              🎉 New courses added monthly
+              🎉 {t('newCoursesMonthly')}
             </span>
           </div>
           
           <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl">
-            Master Digital Skills with
-            <span className="text-blue-600"> Expert Training</span>
+            {t('heroTitle')}
+            <span className="text-blue-600"> {t('heroTitleHighlight')}</span>
           </h1>
           
           <p className="mb-8 text-lg text-gray-600 sm:text-xl max-w-3xl mx-auto">
-            Learn Microsoft Office, Canva, educational apps, and more through interactive online courses. 
-            Get certified and boost your career with hands-on training from industry experts.
+            {t('heroDescription')}
           </p>
           
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center mb-12">
             <Link href="/courses" className="bg-blue-600 text-white px-8 py-3 rounded-md text-base font-medium hover:bg-blue-700 inline-flex items-center justify-center">
-              Browse All Courses →
+              {t('browseAllCourses')} →
             </Link>
             <Link href="/about" className="border border-gray-300 px-8 py-3 rounded-md text-base font-medium hover:bg-gray-50 inline-flex items-center justify-center">
-              Learn More
+              {t('learnMore')}
             </Link>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600 mb-1">500+</div>
-              <div className="text-gray-600">Students Trained</div>
+              <div className="text-gray-600">{t('studentsTrained')}</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600 mb-1">4.9/5</div>
-              <div className="text-gray-600">Average Rating</div>
+              <div className="text-gray-600">{t('averageRating')}</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600 mb-1">100%</div>
-              <div className="text-gray-600">Get Certified</div>
+              <div className="text-gray-600">{t('getCertified')}</div>
             </div>
           </div>
         </div>
@@ -73,9 +81,9 @@ export default function Home() {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Featured Courses</h2>
+            <h2 className="text-3xl font-bold mb-4">{t('featuredCourses')}</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Start your learning journey with our most popular courses
+              {t('featuredCoursesSubtitle')}
             </p>
           </div>
           
@@ -87,15 +95,15 @@ export default function Home() {
               </div>
               <div className="p-6">
                 <div className="flex gap-2 mb-3">
-                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">Intermediate</span>
-                  <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-medium">Microsoft Office</span>
+                  <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">{t('intermediate')}</span>
+                  <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-medium">{t('microsoftOffice')}</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Microsoft Excel Mastery</h3>
-                <p className="text-gray-600 mb-4">Master Excel from basics to advanced formulas, pivot tables, and data analysis.</p>
+                <h3 className="text-xl font-semibold mb-2">{t('excelTitle')}</h3>
+                <p className="text-gray-600 mb-4">{t('excelDescription')}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-blue-600">$199</span>
                   <Link href="/courses/excel" className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">
-                    Learn More
+                    {t('learnMore')}
                   </Link>
                 </div>
               </div>
@@ -108,15 +116,15 @@ export default function Home() {
               </div>
               <div className="p-6">
                 <div className="flex gap-2 mb-3">
-                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">Beginner</span>
-                  <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-medium">Design Tools</span>
+                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">{t('beginner')}</span>
+                  <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-medium">{t('designTools')}</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Canva Design Fundamentals</h3>
-                <p className="text-gray-600 mb-4">Create stunning graphics, presentations, and marketing materials with Canva.</p>
+                <h3 className="text-xl font-semibold mb-2">{t('canvaTitle')}</h3>
+                <p className="text-gray-600 mb-4">{t('canvaDescription')}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-blue-600">$149</span>
                   <Link href="/courses/canva" className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">
-                    Learn More
+                    {t('learnMore')}
                   </Link>
                 </div>
               </div>
@@ -129,15 +137,15 @@ export default function Home() {
               </div>
               <div className="p-6">
                 <div className="flex gap-2 mb-3">
-                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">Beginner</span>
-                  <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-medium">Educational Apps</span>
+                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">{t('beginner')}</span>
+                  <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-medium">{t('educationalApps')}</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">GooseChase Activities</h3>
-                <p className="text-gray-600 mb-4">Create engaging scavenger hunts and educational activities using GooseChase.</p>
+                <h3 className="text-xl font-semibold mb-2">{t('gooseChaseTitle')}</h3>
+                <p className="text-gray-600 mb-4">{t('gooseChaseDescription')}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-blue-600">$99</span>
                   <Link href="/courses/goosechase" className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">
-                    Learn More
+                    {t('learnMore')}
                   </Link>
                 </div>
               </div>
@@ -146,7 +154,7 @@ export default function Home() {
           
           <div className="text-center">
             <Link href="/courses" className="bg-blue-600 text-white px-8 py-3 rounded-md text-base font-medium hover:bg-blue-700 inline-flex items-center">
-              View All Courses →
+              {t('viewAllCourses')} →
             </Link>
           </div>
         </div>
@@ -156,8 +164,8 @@ export default function Home() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Why Choose Our Courses?</h2>
-            <p className="text-lg text-gray-600">We provide comprehensive training designed for real-world application</p>
+            <h2 className="text-3xl font-bold mb-4">{t('whyChoose')}</h2>
+            <p className="text-lg text-gray-600">{t('whyChooseSubtitle')}</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -165,48 +173,48 @@ export default function Home() {
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🎯</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Expert Instructors</h3>
-              <p className="text-gray-600">Learn from industry professionals with years of practical experience</p>
+              <h3 className="text-xl font-semibold mb-2">{t('expertInstructors')}</h3>
+              <p className="text-gray-600">{t('expertInstructorsDesc')}</p>
             </div>
             
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">💻</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Hands-on Learning</h3>
-              <p className="text-gray-600">Practice with real projects and get immediate feedback on your progress</p>
+              <h3 className="text-xl font-semibold mb-2">{t('handsOnLearning')}</h3>
+              <p className="text-gray-600">{t('handsOnLearningDesc')}</p>
             </div>
             
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🏆</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Get Certified</h3>
-              <p className="text-gray-600">Earn a participation certificate upon course completion to showcase your skills</p>
+              <h3 className="text-xl font-semibold mb-2">{t('getCertifiedTitle')}</h3>
+              <p className="text-gray-600">{t('getCertifiedDesc')}</p>
             </div>
             
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">⏰</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Flexible Schedule</h3>
-              <p className="text-gray-600">Evening classes designed to fit around your work and personal commitments</p>
+              <h3 className="text-xl font-semibold mb-2">{t('flexibleSchedule')}</h3>
+              <p className="text-gray-600">{t('flexibleScheduleDesc')}</p>
             </div>
             
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">👥</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Small Class Sizes</h3>
-              <p className="text-gray-600">Limited participants ensure personalized attention and quality interaction</p>
+              <h3 className="text-xl font-semibold mb-2">{t('smallClassSizes')}</h3>
+              <p className="text-gray-600">{t('smallClassSizesDesc')}</p>
             </div>
             
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🌐</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Online Convenience</h3>
-              <p className="text-gray-600">Learn from anywhere with Zoom and Google Meet integration</p>
+              <h3 className="text-xl font-semibold mb-2">{t('onlineConvenience')}</h3>
+              <p className="text-gray-600">{t('onlineConvenienceDesc')}</p>
             </div>
           </div>
         </div>
@@ -218,39 +226,39 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-lg font-semibold mb-4">CourseBug</h3>
-              <p className="text-gray-300">Empowering professionals with digital skills training and certification programs.</p>
+              <p className="text-gray-300">{t('footerDescription')}</p>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Courses</h4>
+              <h4 className="font-semibold mb-4">{t('courses')}</h4>
               <ul className="space-y-2 text-gray-300">
-                <li><Link href="/courses" className="hover:text-white">Microsoft Office</Link></li>
-                <li><Link href="/courses" className="hover:text-white">Design Tools</Link></li>
-                <li><Link href="/courses" className="hover:text-white">Educational Apps</Link></li>
+                <li><Link href="/courses" className="hover:text-white">{t('microsoftOffice')}</Link></li>
+                <li><Link href="/courses" className="hover:text-white">{t('designTools')}</Link></li>
+                <li><Link href="/courses" className="hover:text-white">{t('educationalApps')}</Link></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Company</h4>
+              <h4 className="font-semibold mb-4">{t('company')}</h4>
               <ul className="space-y-2 text-gray-300">
-                <li><Link href="/about" className="hover:text-white">About Us</Link></li>
-                <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
-                <li><Link href="/courses" className="hover:text-white">All Courses</Link></li>
+                <li><Link href="/about" className="hover:text-white">{t('aboutUs')}</Link></li>
+                <li><Link href="/contact" className="hover:text-white">{t('contact')}</Link></li>
+                <li><Link href="/courses" className="hover:text-white">{t('allCourses')}</Link></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
+              <h4 className="font-semibold mb-4">{t('contactTitle')}</h4>
               <ul className="space-y-2 text-gray-300">
-                <li>Email: info@coursebug.com</li>
-                <li>Phone: (555) 123-4567</li>
-                <li>Support: Monday - Friday</li>
+                <li>{t('email')}: info@coursebug.com</li>
+                <li>{t('phone')}: (555) 123-4567</li>
+                <li>{t('support')}</li>
               </ul>
             </div>
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
-            <p>&copy; 2024 CourseBug. All rights reserved.</p>
+            <p>{t('copyright')}</p>
           </div>
         </div>
       </footer>
