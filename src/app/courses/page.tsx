@@ -203,7 +203,7 @@ export default function CoursesPage() {
 
                   {/* Features */}
                   <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2">What you'll learn:</h4>
+                    <h4 className="text-sm font-semibold text-gray-700 mb-2">What you&apos;ll learn:</h4>
                     <div className="flex flex-wrap gap-1">
                       {course.features.slice(0, 3).map((feature, index) => (
                         <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">

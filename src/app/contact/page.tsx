@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { useLanguage } from '@/contexts/language-context'
@@ -22,7 +21,7 @@ export default function ContactPage() {
           
           <p className="mb-8 text-lg text-gray-600 sm:text-xl max-w-3xl mx-auto">
             Have questions about our courses? Need help choosing the right program? 
-            We're here to help you start your learning journey.
+            We&apos;re here to help you start your learning journey.
           </p>
         </div>
       </section>
@@ -89,8 +88,8 @@ export default function ContactPage() {
                   <div className="border rounded-lg p-4">
                     <h3 className="font-semibold mb-2">How do I register for a course?</h3>
                     <p className="text-gray-600 text-sm">
-                      You can register directly on our course pages. Click "Enroll Now" and follow the secure checkout process. 
-                      You'll receive confirmation and course details via email.
+                      You can register directly on our course pages. Click &quot;Enroll Now&quot; and follow the secure checkout process. 
+                      You&apos;ll receive confirmation and course details via email.
                     </p>
                   </div>
                   
@@ -98,7 +97,7 @@ export default function ContactPage() {
                     <h3 className="font-semibold mb-2">What if I need to cancel or reschedule?</h3>
                     <p className="text-gray-600 text-sm">
                       We offer a 30-day money-back guarantee. If you need to reschedule, contact us at least 48 hours 
-                      before the course starts and we'll help you find the next available session.
+                      before the course starts and we&apos;ll help you find the next available session.
                     </p>
                   </div>
                   

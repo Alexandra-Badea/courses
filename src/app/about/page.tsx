@@ -42,8 +42,8 @@ export default function AboutPage() {
                 through interactive online sessions that fit your schedule.
               </p>
               <p className="text-gray-700">
-                Whether you're a professional looking to advance your career, an educator seeking to enhance 
-                your teaching toolkit, or someone wanting to stay current with technology, we're here to guide 
+                Whether you&apos;re a professional looking to advance your career, an educator seeking to enhance 
+                your teaching toolkit, or someone wanting to stay current with technology, we&apos;re here to guide 
                 your learning journey.
               </p>
             </div>

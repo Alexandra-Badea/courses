@@ -67,7 +67,7 @@ export default function ExcelCoursePage() {
 
               {/* What You'll Learn */}
               <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4">What You'll Learn</h2>
+                <h2 className="text-2xl font-bold mb-4">What You&apos;ll Learn</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
                     'Advanced Excel formulas and functions',
