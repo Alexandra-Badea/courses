@@ -1,39 +1,32 @@
+'use client'
+
 import Link from 'next/link'
-import { Menu } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useLanguage } from '@/contexts/language-context'
+import { LanguageSwitcher } from '@/components/language-switcher'
 
 export function Header() {
+  const { t } = useLanguage()
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="border-b bg-white/95 backdrop-blur">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center space-x-2">
           <span className="text-2xl">🐞</span>
           <span className="text-xl font-bold">CourseBug</span>
         </Link>
-
+        
         <nav className="hidden md:flex items-center space-x-6">
-          <Link href="/" className="text-sm font-medium transition-colors hover:text-primary">
-            Home
-          </Link>
-          <Link href="/courses" className="text-sm font-medium transition-colors hover:text-primary">
-            Courses
-          </Link>
-          <Link href="/about" className="text-sm font-medium transition-colors hover:text-primary">
-            About
-          </Link>
-          <Link href="/contact" className="text-sm font-medium transition-colors hover:text-primary">
-            Contact
-          </Link>
+          <Link href="/" className="text-sm font-medium hover:text-blue-600">{t('home')}</Link>
+          <Link href="/courses" className="text-sm font-medium hover:text-blue-600">{t('courses')}</Link>
+          <Link href="/about" className="text-sm font-medium hover:text-blue-600">{t('about')}</Link>
+          <Link href="/contact" className="text-sm font-medium hover:text-blue-600">{t('contact')}</Link>
         </nav>
-
-        <div className="flex items-center space-x-4">
-          <Button asChild className="hidden md:inline-flex">
-            <Link href="/courses">Browse Courses</Link>
-          </Button>
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Menu</span>
-          </Button>
+        
+        <div className="flex items-center gap-4">
+          <LanguageSwitcher />
+          <Link href="/courses" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 hidden sm:inline-flex">
+            {t('browseCourses')}
+          </Link>
         </div>
       </div>
     </header>

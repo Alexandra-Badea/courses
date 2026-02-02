@@ -1,42 +1,27 @@
+'use client'
+
 import Link from 'next/link'
+import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
+import { useLanguage } from '@/contexts/language-context'
 
 export default function AboutPage() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Header */}
-      <header className="border-b bg-white/95 backdrop-blur">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded bg-blue-600 flex items-center justify-center">
-              <span className="text-white font-bold">C</span>
-            </div>
-            <span className="text-xl font-bold">CourseHub</span>
-          </Link>
-          
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/" className="text-sm font-medium hover:text-blue-600">Home</Link>
-            <Link href="/courses" className="text-sm font-medium hover:text-blue-600">Courses</Link>
-            <Link href="/about" className="text-sm font-medium text-blue-600">About</Link>
-            <Link href="/contact" className="text-sm font-medium hover:text-blue-600">Contact</Link>
-          </nav>
-          
-          <Link href="/courses" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
-            Browse Courses
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="py-16 px-4">
         <div className="container mx-auto text-center max-w-4xl">
           <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl">
-            About
-            <span className="text-blue-600"> CourseHub</span>
+            {t('about')}
+            <span className="text-blue-600"> CourseBug</span>
           </h1>
           
           <p className="mb-8 text-lg text-gray-600 sm:text-xl max-w-3xl mx-auto">
-            Empowering professionals and educators with practical digital skills through 
-            expert-led online training programs.
+            {t('footerDescription')}
           </p>
         </div>
       </section>
@@ -288,47 +273,7 @@ export default function AboutPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">CourseHub</h3>
-              <p className="text-gray-300">Empowering professionals with digital skills training and certification programs.</p>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Courses</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li><Link href="/courses" className="hover:text-white">Microsoft Office</Link></li>
-                <li><Link href="/courses" className="hover:text-white">Design Tools</Link></li>
-                <li><Link href="/courses" className="hover:text-white">Educational Apps</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li><Link href="/about" className="hover:text-white">About Us</Link></li>
-                <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
-                <li><Link href="/courses" className="hover:text-white">All Courses</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li>Email: info@coursehub.com</li>
-                <li>Phone: (555) 123-4567</li>
-                <li>Support: Monday - Friday</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
-            <p>&copy; 2024 CourseHub. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 } 

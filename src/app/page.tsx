@@ -2,36 +2,15 @@
 
 import Link from 'next/link'
 import { useLanguage } from '@/contexts/language-context'
-import { LanguageSwitcher } from '@/components/language-switcher'
+import { Header } from '@/components/header'
+import { Footer } from '@/components/footer'
 
 export default function Home() {
   const { t } = useLanguage()
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Header */}
-      <header className="border-b bg-white/95 backdrop-blur">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl">🐞</span>
-            <span className="text-xl font-bold">CourseBug</span>
-          </Link>
-          
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/" className="text-sm font-medium hover:text-blue-600">{t('home')}</Link>
-            <Link href="/courses" className="text-sm font-medium hover:text-blue-600">{t('courses')}</Link>
-            <Link href="/about" className="text-sm font-medium hover:text-blue-600">{t('about')}</Link>
-            <Link href="/contact" className="text-sm font-medium hover:text-blue-600">{t('contact')}</Link>
-          </nav>
-          
-          <div className="flex items-center gap-4">
-            <LanguageSwitcher />
-            <Link href="/courses" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 hidden sm:inline-flex">
-              {t('browseCourses')}
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="py-24 px-4">
@@ -221,47 +200,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">CourseBug</h3>
-              <p className="text-gray-300">{t('footerDescription')}</p>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">{t('courses')}</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li><Link href="/courses" className="hover:text-white">{t('microsoftOffice')}</Link></li>
-                <li><Link href="/courses" className="hover:text-white">{t('designTools')}</Link></li>
-                <li><Link href="/courses" className="hover:text-white">{t('educationalApps')}</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">{t('company')}</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li><Link href="/about" className="hover:text-white">{t('aboutUs')}</Link></li>
-                <li><Link href="/contact" className="hover:text-white">{t('contact')}</Link></li>
-                <li><Link href="/courses" className="hover:text-white">{t('allCourses')}</Link></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">{t('contactTitle')}</h4>
-              <ul className="space-y-2 text-gray-300">
-                <li>{t('email')}: info@coursebug.com</li>
-                <li>{t('phone')}: (555) 123-4567</li>
-                <li>{t('support')}</li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-300">
-            <p>{t('copyright')}</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
