@@ -1,71 +1,46 @@
-'use client'
-
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useLanguage } from '@/contexts/language-context'
-import { LanguageSwitcher } from '@/components/language-switcher'
+import { Logo } from './logo'
+import { LanguageSwitch } from './language-switch'
+import { getDictionary } from '@/content/dictionary'
+import { href, type Locale } from '@/lib/i18n'
 
-export function Header() {
-  const { t } = useLanguage()
-  const pathname = usePathname()
-
-  const isActive = (path: string) => {
-    if (path === '/') {
-      return pathname === '/'
-    }
-    return pathname.startsWith(path)
-  }
+export function Header({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale)
+  const home = href(locale)
+  const links = [
+    { to: `${home}#courses`, label: t.nav.courses },
+    { to: `${home}#certificate`, label: t.nav.certificate },
+    { to: `${home}#about`, label: t.nav.about },
+    { to: `${home}#faq`, label: t.nav.faq },
+  ]
 
   return (
-    <header className="border-b bg-white/95 backdrop-blur">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="flex items-center space-x-2">
-          <span className="text-2xl">🐞</span>
-          <span className="text-xl font-bold">CourseBug</span>
+    <header className="sticky top-0 z-40 bg-board text-chalk print:hidden">
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-full focus:bg-highlight focus:px-4 focus:py-2 focus:text-highlight-ink">
+        {t.nav.skip}
+      </a>
+      <div className="wrap flex h-16 items-center justify-between gap-4">
+        <Link href={home} className="shrink-0 rounded-lg">
+          <Logo />
         </Link>
-        
-        <nav className="hidden md:flex items-center space-x-6">
-          <Link 
-            href="/" 
-            className={`text-sm font-medium transition-colors ${
-              isActive('/') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-            }`}
-          >
-            {t('home')}
-          </Link>
-          <Link 
-            href="/courses" 
-            className={`text-sm font-medium transition-colors ${
-              isActive('/courses') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-            }`}
-          >
-            {t('courses')}
-          </Link>
-          <Link 
-            href="/about" 
-            className={`text-sm font-medium transition-colors ${
-              isActive('/about') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-            }`}
-          >
-            {t('about')}
-          </Link>
-          <Link 
-            href="/contact" 
-            className={`text-sm font-medium transition-colors ${
-              isActive('/contact') ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-            }`}
-          >
-            {t('contact')}
-          </Link>
+        <nav aria-label={t.nav.menu} className="hidden md:block">
+          <ul className="flex items-center gap-6 text-[15px] font-semibold">
+            {links.map((l) => (
+              <li key={l.to}>
+                <Link href={l.to} className="text-chalk-soft transition-colors hover:text-chalk">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
-        
-        <div className="flex items-center gap-4">
-          <LanguageSwitcher />
-          <Link href="/courses" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 hidden sm:inline-flex">
-            {t('browseCourses')}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageSwitch locale={locale} label={t.lang.label} />
+          <Link href={`${home}#courses`} className="btn btn-highlight px-3.5 py-2.5 text-sm sm:px-4">
+            {t.nav.enrol}
           </Link>
         </div>
       </div>
     </header>
   )
-} 
+}

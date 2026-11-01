@@ -1,80 +1,102 @@
 @import "tailwindcss";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/atkinson-hyperlegible-next";
 
-:root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222.2 84% 4.9%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222.2 84% 4.9%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
-  --radius: 0.5rem;
+/*
+ * A classroom: paper, a deep board green, and highlighter yellow for the one thing to press.
+ * Board green carries the brand (header band, hero, contact); yellow is only for main actions
+ * on the board and the certificate seal. Text is ink on paper, chalk on the board.
+ */
+@theme {
+  --color-paper: #f4f6f1;
+  --color-paper-2: #e9eee6;
+  --color-card: #ffffff;
+  --color-ink: #17251f;
+  --color-ink-soft: #4a5a53;
+  --color-line: #d5ddd2;
+  --color-board: #1e4637;
+  --color-board-2: #183a2d;
+  --color-chalk: #eef4ee;
+  --color-chalk-soft: #b9cdc2;
+  --color-highlight: #f2d14b;
+  --color-highlight-ink: #2a2405;
+  --color-ok: #1f7a4d;
+  --color-warn: #8a4b08;
+
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Atkinson Hyperlegible Next Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-.dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  h1, h2, h3 {
+    @apply font-display text-balance;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  :where(a, button, summary, input):focus-visible {
+    outline: 3px solid var(--color-highlight);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-highlight) 70%, transparent);
+  }
 }
 
-@theme inline {
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold leading-none transition-colors;
+  }
+  /* Main action on the board */
+  .btn-highlight {
+    @apply bg-highlight text-highlight-ink hover:bg-[#f7dd73];
+  }
+  /* Main action on paper */
+  .btn-board {
+    @apply bg-board text-chalk hover:bg-board-2;
+  }
+  .btn-ghost-chalk {
+    @apply text-chalk underline decoration-chalk-soft underline-offset-4 hover:decoration-chalk;
+  }
+
+  .link {
+    @apply font-semibold text-board underline decoration-board/30 underline-offset-4 hover:decoration-board;
+  }
+
+  .h2 {
+    @apply text-3xl sm:text-4xl font-bold;
+  }
+
+  .card {
+    @apply rounded-2xl border border-line bg-card;
+  }
 }
 
-* {
-  border-color: hsl(var(--border));
-}
-
-body {
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+/* Printing the certificate: only the certificate, on one A4 page in landscape */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+  body {
+    background: #fff;
+  }
 }

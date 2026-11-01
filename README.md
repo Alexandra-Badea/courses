@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CourseBug
 
-## Getting Started
+Live online courses in digital skills for teachers and youth workers, by Alexandra Badea. The site is in Romanian (`/ro/`) and English (`/en/`); the bare address sends visitors to the language of their browser.
 
-First, run the development server:
+Three courses, each with 4 live two-hour sessions, practice between sessions and a final task. At the end, participants get a **certificate of participation** that anyone can check on the site with its code or QR code. It is not an accredited certificate and doesn't award professional credits; the site says so plainly.
+
+## Opening a group
+
+Everything about dates and money is in `src/content/catalog.json`. For each course, fill in:
+
+- `nextGroup`: start and end dates (`YYYY-MM-DD`) and the schedule in both languages
+- `price`: amount and currency, e.g. `{ "amount": 250, "currency": "RON" }`
+- `paymentLink`: a Stripe Payment Link, if you take card payments
+
+Leave them `null` until you know them: the page then says the dates and price are coming soon, and the enrol button opens an email to you with a ready-made message. The bottom of the file has an example.
+
+Your name, email, platform and maximum group size are in `src/content/site.json`. The course texts (titles, skills, programme) are in `src/content/courses.ts`, and every other text on the site is in `src/content/dictionary.ts`, Romanian first, English second.
+
+## Issuing a certificate
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run certificate -- --name "Maria Popescu" --course ai-teaching --start 2026-12-01 --end 2026-12-10 --url https://your-site
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This creates `public/certificates/CB-XXXX-XXXX.json` and prints the links to send. Commit and push the file; after the site redeploys, the participant can open the certificate, print it or save it as a PDF (one A4 page), and anyone can check the code at `/ro/verify/`. Courses: `ai-teaching`, `interactive-lessons`, `online-safety`. Options: `--issued YYYY-MM-DD` (default today).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+A certificate can only be opened with its code, and certificates aren't listed for search engines. `CB-EXEMPLU` is a sample, marked as such everywhere.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Running it
 
-## Learn More
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # static site in out/
+npm run lint && npm run typecheck
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+It's a static site (`output: "export"` in `next.config.ts`): no server or database. Vercel builds it with the default Next.js settings. `wrangler.toml` lets Cloudflare Workers serve the same `out` folder, if you host it there instead.
