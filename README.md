@@ -19,10 +19,10 @@ Your name, email, platform and maximum group size are in `src/content/site.json`
 ## Issuing a certificate
 
 ```bash
-npm run certificate -- --name "Maria Popescu" --course ai-teaching --start 2026-12-01 --end 2026-12-10 --url https://your-site
+npm run certificate -- --name "Maria Popescu" --course ai-teaching --start 2026-12-01 --end 2026-12-10
 ```
 
-This creates `public/certificates/CB-XXXX-XXXX.json` and prints the links to send. Commit and push the file; after the site redeploys, the participant can open the certificate, print it or save it as a PDF (one A4 page), and anyone can check the code at `/ro/verify/`. Courses: `ai-teaching`, `interactive-lessons`, `online-safety`. Options: `--issued YYYY-MM-DD` (default today).
+This creates `public/certificates/CB-XXXX-XXXX.json` and prints the links to send. Commit and push the file; after the site redeploys, the participant can open the certificate, print it or save it as a PDF (one A4 page), and anyone can check the code at `/ro/verify/`. Courses: `ai-everyday`, `prompting`, `ai-at-work`, `ai-teaching`, `interactive-lessons`, `online-safety`. Options: `--issued YYYY-MM-DD` (default today), `--url` (default https://coursebug.com).
 
 A certificate can only be opened with its code, and certificates aren't listed for search engines. `CB-EXEMPLU` is a sample, marked as such everywhere.
 
@@ -35,4 +35,4 @@ npm run build      # static site in out/
 npm run lint && npm run typecheck
 ```
 
-It's a static site (`output: "export"` in `next.config.ts`): no server or database. Vercel builds it with the default Next.js settings. `wrangler.toml` lets Cloudflare Workers serve the same `out` folder, if you host it there instead.
+It's a static site (`output: "export"` in `next.config.ts`): no server or database. It's hosted on Cloudflare Workers at https://coursebug.com: every push to `master` builds it (`npm run build`) and deploys the `out` folder (`npx wrangler deploy`). `wrangler.toml` holds the settings, including the coursebug.com and www.coursebug.com addresses.

@@ -6,7 +6,7 @@
  *
  *   npm run certificate -- --name "Maria Popescu" --course ai-teaching --start 2026-12-01 --end 2026-12-10
  *
- * Optional: --issued 2026-12-11 (default: today), --url https://your-domain (for the printed links)
+ * Optional: --issued 2026-12-11 (default: today), --url https://… (default: https://coursebug.com)
  * Courses: see src/content/catalog.json for the slugs (ai-everyday, prompting, ai-at-work, ai-teaching, ...)
  */
 import { randomInt } from 'node:crypto'
@@ -35,7 +35,7 @@ const slug = arg('course')
 const start = arg('start')
 const end = arg('end')
 const issued = arg('issued') ?? today
-const url = (arg('url') ?? 'https://YOUR-SITE').replace(/\/+$/, '')
+const url = (arg('url') ?? 'https://coursebug.com').replace(/\/+$/, '')
 
 if (!name) fail('Missing --name (the participant’s full name).')
 const course = catalog.courses.find((c) => c.slug === slug)
