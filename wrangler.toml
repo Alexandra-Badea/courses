@@ -1,12 +1,8 @@
 # Cloudflare Workers: serves the static site from `out`.
+# In Cloudflare's build settings: build command `npm run build`, deploy command `npx wrangler deploy`.
 # Only needed if the site is hosted on Cloudflare; Vercel ignores this file.
 name = "courses"
 compatibility_date = "2026-02-02"
-
-# Cloudflare's build runs `npx wrangler deploy` on a fresh checkout, where `out` doesn't exist yet,
-# so wrangler builds the site first.
-[build]
-command = "npm run build"
 
 [assets]
 directory = "./out"
