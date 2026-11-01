@@ -1,10 +1,20 @@
+import type { CSSProperties } from 'react'
 import Link from 'next/link'
 import site from '@/content/site.json'
 import sample from '../../../public/certificates/CB-EXEMPLU.json'
 import { courses, getCourse } from '@/content/courses'
 import { getDictionary } from '@/content/dictionary'
 import { CertificateWithQr } from '@/components/certificate-preview'
+import { HeroLadybug } from '@/components/hero-ladybug'
 import { formatDate, href, isLocale, type Locale } from '@/lib/i18n'
+
+const tilt = (deg: number) => ({ '--tilt': `${deg}deg` }) as CSSProperties
+const tapeAt = (left: string, deg: number) => ({ left, '--tape-tilt': `${deg}deg` }) as CSSProperties
+
+// Dot stickers for lists that aren't a sequence; numbered stickers for the steps, which are
+const dots = ['bg-bug', 'bg-highlight', 'bg-note-mint ring-1 ring-ink/15']
+const stepStickers = ['bg-bug-ink text-white', 'bg-highlight text-highlight-ink', 'bg-note-mint text-ink', 'bg-ink text-paper']
+const noteTilts = [-1.6, 1.1, -0.7]
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: l } = await params
@@ -14,36 +24,40 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
   return (
     <>
-      {/* Hero: the board, with the certificate you get at the end */}
-      <section className="relative overflow-hidden bg-board text-chalk">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[0.07]"
-          style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)', backgroundSize: '22px 22px' }}
-        />
-        <div className="wrap relative grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:py-24">
+      {/* Hero: flipchart paper, the headline in marker, and the certificate you get at the end */}
+      <section className="grid-paper relative overflow-hidden border-b border-line">
+        <div className="wrap relative grid items-center gap-12 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:grid-cols-[1.08fr_1fr] lg:gap-12 lg:pb-24 lg:pt-20">
           <div>
-            <h1 className="text-[2.6rem] font-extrabold sm:text-6xl">{t.hero.title}</h1>
-            <p className="mt-6 max-w-[34rem] text-lg text-chalk-soft sm:text-xl">{t.hero.lead}</p>
-            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-              <Link href={`${href(locale)}#courses`} className="btn btn-highlight text-base">
+            <h1 className="text-[3.05rem] sm:text-[4.6rem] lg:text-[5.1rem]">{t.hero.title}</h1>
+            <p className="mt-7 max-w-[34rem] text-lg text-ink-soft sm:text-xl">{t.hero.lead}</p>
+            <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+              <Link href={`${href(locale)}#courses`} className="btn btn-bug px-6 py-3.5 text-base">
                 {t.hero.primary}
               </Link>
-              <Link href={`${href(locale)}#certificate`} className="btn-ghost-chalk font-semibold">
+              <Link href={`${href(locale)}#certificate`} className="link">
                 {t.hero.secondary}
               </Link>
             </div>
-            <ul className="mt-10 grid gap-3 text-[15px] sm:grid-cols-3 sm:gap-5">
-              {t.hero.facts.map((f) => (
-                <li key={f} className="flex items-start gap-2.5 border-t border-chalk/20 pt-3 text-chalk">
-                  <span aria-hidden="true" className="mt-2 size-2 shrink-0 rounded-full bg-highlight" />
+            <ul className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-[15px] font-semibold">
+              {t.hero.facts.map((f, i) => (
+                <li key={f} className="flex items-center gap-2.5">
+                  <span aria-hidden="true" className={`dot ${dots[i % dots.length]}`} />
                   {f}
                 </li>
               ))}
             </ul>
           </div>
-          <div className="relative mx-auto w-full max-w-[34rem] lg:max-w-none">
-            <div className="rotate-[1.5deg] rounded-md shadow-[0_30px_60px_-20px_rgb(0_0_0/0.55)] transition-transform duration-300 motion-safe:hover:rotate-0">
+          <div className="relative mx-auto w-full max-w-[34rem] pt-16 sm:pt-20 lg:max-w-none">
+            <div aria-hidden="true" className="absolute left-1 top-0 flex items-start gap-1 sm:left-4">
+              <span className="hand -rotate-3 text-[1.85rem] text-ink sm:text-[2.2rem]">{t.hero.note}</span>
+              <svg viewBox="0 0 60 48" className="mt-3 h-11 w-14 text-ink sm:h-12 sm:w-16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 8c18-6 38 0 46 30" />
+                <path d="M40 31l9 8 4-11" />
+              </svg>
+            </div>
+            <div className="relative rotate-[1.8deg] shadow-[0_26px_50px_-22px_rgb(23_37_31/0.55)]">
+              <span aria-hidden="true" className="tape z-10" style={tapeAt('12%', -9)} />
+              <span aria-hidden="true" data-perch className="tape z-10" style={tapeAt('88%', 8)} />
               <CertificateWithQr
                 locale={locale}
                 data={{
@@ -60,19 +74,21 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 }}
               />
             </div>
+            <HeroLadybug label={t.hero.bug} />
           </div>
         </div>
       </section>
 
       {/* Who it's for */}
-      <section className="wrap py-16 sm:py-20" aria-labelledby="who-title">
-        <h2 id="who-title" className="h2">
+      <section className="wrap py-16 sm:py-24" aria-labelledby="who-title">
+        <h2 id="who-title" className="h2 max-w-3xl">
           {t.who.title}
         </h2>
-        <ul className="mt-8 grid gap-6 md:grid-cols-3">
-          {t.who.items.map((w) => (
-            <li key={w.title} className="border-l-4 border-board pl-5">
-              <h3 className="text-xl font-bold">{w.title}</h3>
+        <ul className="mt-10 grid gap-8 md:grid-cols-3 md:gap-10">
+          {t.who.items.map((w, i) => (
+            <li key={w.title}>
+              <span aria-hidden="true" className={`dot size-4 ${dots[i % dots.length]}`} />
+              <h3 className="mt-4 text-2xl font-bold">{w.title}</h3>
               <p className="mt-2 text-ink-soft">{w.text}</p>
             </li>
           ))}
@@ -80,36 +96,45 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       </section>
 
       {/* Courses */}
-      <section id="courses" className="bg-paper-2 py-16 sm:py-20" aria-labelledby="courses-title">
+      <section id="courses" className="bg-paper-2 py-16 sm:py-24" aria-labelledby="courses-title">
         <div className="wrap">
           <h2 id="courses-title" className="h2">
             {t.courses.title}
           </h2>
           <p className="mt-3 max-w-2xl text-lg text-ink-soft">{t.courses.lead}</p>
-          <ul className="mt-10 grid gap-5 lg:grid-cols-3">
-            {courses.map((c) => (
-              <li key={c.slug} className="card flex flex-col p-6 sm:p-7">
-                <p className="text-sm font-semibold text-board">
+          <ul className="mt-14 grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
+            {courses.map((c, i) => (
+              <li key={c.slug} className={`note note-${c.colour} flex flex-col px-6 pb-7 pt-9 sm:px-7`} style={tilt(noteTilts[i % noteTilts.length])}>
+                <span aria-hidden="true" className="tape" />
+                <p className="text-sm font-semibold text-ink/75">
                   {t.courses.for}: {c.audience[locale]}
                 </p>
-                <h3 className="mt-3 text-2xl font-bold">
+                <h3 className="mt-3 text-[1.7rem] font-extrabold leading-[1.05]" style={{ fontStretch: '85%' }}>
                   <Link href={href(locale, `courses/${c.slug}`)} className="hover:underline hover:decoration-2 hover:underline-offset-4">
                     {c.title[locale]}
                   </Link>
                 </h3>
-                <p className="mt-3 text-ink-soft">{c.outcome[locale]}</p>
-                <dl className="mt-6 grid grid-cols-2 gap-3 border-t border-line pt-4 text-sm">
+                <p className="mt-3 text-ink/80">{c.outcome[locale]}</p>
+                <p className="mt-5 text-sm font-semibold text-ink/75">{t.courses.tools}</p>
+                <ul className="mt-2 flex flex-wrap gap-1.5">
+                  {c.tools.map((tool) => (
+                    <li key={tool.name} className="chip">
+                      {tool.name}
+                    </li>
+                  ))}
+                </ul>
+                <dl className="mt-6 grid grid-cols-2 gap-3 border-t border-ink/15 pt-4 text-sm">
                   <div>
-                    <dt className="text-ink-soft">{t.course.facts.format}</dt>
+                    <dt className="text-ink/75">{t.course.facts.format}</dt>
                     <dd className="font-semibold">{t.course.facts.formatValue(c.sessions, c.hoursPerSession)}</dd>
                   </div>
                   <div>
-                    <dt className="text-ink-soft">{t.course.facts.practice}</dt>
+                    <dt className="text-ink/75">{t.course.facts.practice}</dt>
                     <dd className="font-semibold">{t.courses.hours(c.hoursPractice)}</dd>
                   </div>
                 </dl>
-                <div className="mt-auto pt-6">
-                  <Link href={href(locale, `courses/${c.slug}`)} className="btn btn-board w-full sm:w-auto" aria-label={`${t.courses.details}: ${c.title[locale]}`}>
+                <div className="mt-auto pt-7">
+                  <Link href={href(locale, `courses/${c.slug}`)} className="btn btn-ink w-full sm:w-auto" aria-label={`${t.courses.details}: ${c.title[locale]}`}>
                     {t.courses.details}
                   </Link>
                 </div>
@@ -120,14 +145,14 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       </section>
 
       {/* How it works: a real sequence, so numbered */}
-      <section className="wrap py-16 sm:py-20" aria-labelledby="steps-title">
+      <section className="wrap py-16 sm:py-24" aria-labelledby="steps-title">
         <h2 id="steps-title" className="h2">
           {t.steps.title}
         </h2>
         <ol className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {t.steps.items.map((s, i) => (
             <li key={s.title}>
-              <span aria-hidden="true" className="grid size-10 place-items-center rounded-full bg-board font-display text-lg font-bold text-chalk">
+              <span aria-hidden="true" className={`grid size-12 place-items-center rounded-full font-display text-xl font-extrabold shadow-[inset_0_-2px_0_rgb(0_0_0/0.12)] ${stepStickers[i % stepStickers.length]}`}>
                 {i + 1}
               </span>
               <h3 className="mt-4 text-xl font-bold">{s.title}</h3>
@@ -138,7 +163,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       </section>
 
       {/* The certificate: what it is and what it isn't */}
-      <section id="certificate" className="bg-paper-2 py-16 sm:py-20" aria-labelledby="certificate-title">
+      <section id="certificate" className="bg-paper-2 py-16 sm:py-24" aria-labelledby="certificate-title">
         <div className="wrap grid gap-10 lg:grid-cols-2 lg:gap-16">
           <div>
             <h2 id="certificate-title" className="h2">
@@ -174,7 +199,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       </section>
 
       {/* About */}
-      <section id="about" className="wrap py-16 sm:py-20" aria-labelledby="about-title">
+      <section id="about" className="wrap py-16 sm:py-24" aria-labelledby="about-title">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:gap-16">
           <div>
             <h2 id="about-title" className="h2">
@@ -197,7 +222,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="bg-paper-2 py-16 sm:py-20" aria-labelledby="faq-title">
+      <section id="faq" className="bg-paper-2 py-16 sm:py-24" aria-labelledby="faq-title">
         <div className="wrap max-w-3xl">
           <h2 id="faq-title" className="h2">
             {t.faq.title}
@@ -219,7 +244,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       </section>
 
       {/* Contact */}
-      <section id="contact" className="bg-board text-chalk" aria-labelledby="contact-title">
+      <section id="contact" className="on-dark bg-board text-chalk" aria-labelledby="contact-title">
         <div className="wrap flex flex-col items-start gap-6 py-16 sm:flex-row sm:items-center sm:justify-between sm:py-20">
           <div>
             <h2 id="contact-title" className="h2">

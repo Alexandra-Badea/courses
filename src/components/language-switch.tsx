@@ -41,7 +41,7 @@ export function LanguageSwitch({ locale, label, tone = 'chalk' }: { locale: Loca
               active
                 ? tone === 'chalk'
                   ? 'bg-chalk text-board'
-                  : 'bg-board text-chalk'
+                  : 'bg-ink text-paper'
                 : tone === 'chalk'
                   ? 'text-chalk-soft hover:text-chalk'
                   : 'text-ink-soft hover:text-ink'

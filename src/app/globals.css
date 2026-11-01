@@ -1,11 +1,14 @@
 @import "tailwindcss";
-@import "@fontsource-variable/bricolage-grotesque";
+/* standard.css carries all three axes (weight, width, optical size); index.css only has weight */
+@import "@fontsource-variable/bricolage-grotesque/standard.css";
 @import "@fontsource-variable/atkinson-hyperlegible-next";
+@import "@fontsource-variable/caveat";
 
 /*
- * A classroom: paper, a deep board green, and highlighter yellow for the one thing to press.
- * Board green carries the brand (header band, hero, contact); yellow is only for main actions
- * on the board and the certificate seal. Text is ink on paper, chalk on the board.
+ * A trainer's workshop table: flipchart paper with a faint grid, marker ink, sticky notes,
+ * masking tape and a ladybug. Ladybug red is for the main action and the bug itself; each course
+ * has its own sticky-note colour. Handwriting (Caveat) only marks what participants take away.
+ * Board green is kept for the one dark band (contact) and the certificate.
  */
 @theme {
   --color-paper: #f4f6f1;
@@ -23,8 +26,19 @@
   --color-ok: #1f7a4d;
   --color-warn: #8a4b08;
 
+  /* The ladybug: #e2483d for drawing, the darker red for text and buttons (5:1 on white) */
+  --color-bug: #e2483d;
+  --color-bug-ink: #bf392f;
+  --color-bug-deep: #9f2e26;
+
+  --color-note-yellow: #f7e17c;
+  --color-note-pink: #f8c6cf;
+  --color-note-mint: #bfe6d2;
+  --color-tape: #e8e0c4;
+
   --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Atkinson Hyperlegible Next Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Caveat Variable", "Segoe Print", "Bradley Hand", cursive;
 }
 
 @layer base {
@@ -47,9 +61,16 @@
     letter-spacing: -0.02em;
     line-height: 1.1;
   }
+  /* Big headings are set narrow and heavy, like marker on a flipchart */
+  h1, h2 {
+    font-stretch: 80%;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 0.98;
+  }
   :where(a, button, summary, input):focus-visible {
-    outline: 3px solid var(--color-highlight);
-    outline-offset: 2px;
+    outline: 3px solid var(--focus, var(--color-ink));
+    outline-offset: 3px;
     border-radius: 6px;
   }
   ::selection {
@@ -62,32 +83,213 @@
     @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
   }
 
+  /* Dark bands switch the focus ring to yellow */
+  .on-dark {
+    --focus: var(--color-highlight);
+  }
+
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 font-semibold leading-none transition-colors;
   }
-  /* Main action on the board */
+  /* The main action: ladybug red */
+  .btn-bug {
+    @apply bg-bug-ink text-white hover:bg-bug-deep;
+  }
+  /* Actions inside sticky notes and cards */
+  .btn-ink {
+    @apply bg-ink text-paper hover:bg-board;
+  }
+  /* The main action on the dark band */
   .btn-highlight {
     @apply bg-highlight text-highlight-ink hover:bg-[#f7dd73];
-  }
-  /* Main action on paper */
-  .btn-board {
-    @apply bg-board text-chalk hover:bg-board-2;
   }
   .btn-ghost-chalk {
     @apply text-chalk underline decoration-chalk-soft underline-offset-4 hover:decoration-chalk;
   }
 
   .link {
-    @apply font-semibold text-board underline decoration-board/30 underline-offset-4 hover:decoration-board;
+    @apply font-semibold text-ink underline decoration-bug decoration-2 underline-offset-[5px] transition-[text-decoration-thickness] hover:decoration-[3px];
   }
 
   .h2 {
-    @apply text-3xl sm:text-4xl font-bold;
+    @apply text-[2.6rem] sm:text-[3.4rem];
   }
 
   .card {
     @apply rounded-2xl border border-line bg-card;
   }
+
+  /* Handwriting, used only for what participants take away */
+  .hand {
+    font-family: var(--font-hand);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  /* Flipchart paper */
+  .grid-paper {
+    background-color: var(--color-paper);
+    background-image:
+      linear-gradient(to right, rgb(23 37 31 / 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(23 37 31 / 0.055) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -1px -1px;
+  }
+  /* The same grid over a coloured background */
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgb(23 37 31 / 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(23 37 31 / 0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    background-position: -1px -1px;
+  }
+
+  /* A sticky note: square, lifted at the bottom-right corner, tilted by --tilt */
+  .note {
+    --note: var(--color-note-yellow);
+    position: relative;
+    background: var(--note);
+    border-radius: 2px 2px 28px 2px / 2px 2px 7px 2px;
+    box-shadow:
+      0 1px 1px rgb(23 37 31 / 0.08),
+      6px 16px 22px -14px rgb(23 37 31 / 0.45);
+    rotate: var(--tilt, 0deg);
+    transition: rotate 0.25s ease;
+  }
+  .note-yellow { --note: var(--color-note-yellow); }
+  .note-pink { --note: var(--color-note-pink); }
+  .note-mint { --note: var(--color-note-mint); }
+  @media (prefers-reduced-motion: no-preference) {
+    .note:hover,
+    .note:focus-within {
+      rotate: 0deg;
+    }
+  }
+
+  /* Masking tape across the top edge */
+  .tape {
+    position: absolute;
+    top: -0.85rem;
+    left: 50%;
+    width: 6.5rem;
+    height: 1.7rem;
+    translate: -50% 0;
+    rotate: var(--tape-tilt, -3deg);
+    background: color-mix(in oklab, var(--color-tape) 82%, transparent);
+    box-shadow: 0 1px 2px rgb(23 37 31 / 0.12);
+    clip-path: polygon(0 6%, 4% 0, 8% 8%, 12% 0, 100% 2%, 97% 50%, 100% 96%, 0 100%, 3% 50%);
+  }
+
+  /* A tool name, like a small label stuck on the note */
+  .chip {
+    @apply inline-flex items-center rounded-md border border-ink/15 bg-white/75 px-2 py-0.5 text-sm font-semibold leading-snug text-ink;
+  }
+
+  /* A round dot sticker, the kind used for dot voting */
+  .dot {
+    @apply inline-block size-3 shrink-0 rounded-full;
+    box-shadow: inset 0 -1px 0 rgb(0 0 0 / 0.12);
+  }
+}
+
+/*
+ * The ladybug. Legs walk while .is-walking; the wing cases open and the wings flap while
+ * .is-flying; the antennae twitch now and then. Everything stops for reduced motion.
+ */
+@layer components {
+  .bug :is(.leg, .antenna, .shell, .wing) {
+    transform-box: view-box;
+  }
+  .bug .leg-a,
+  .bug .leg-b {
+    rotate: 0deg;
+  }
+  .bug.is-walking .leg-a {
+    animation: bug-step 0.16s ease-in-out infinite alternate;
+  }
+  .bug.is-walking .leg-b {
+    animation: bug-step 0.16s ease-in-out infinite alternate-reverse;
+  }
+  .bug .antenna-l {
+    animation: bug-twitch 5.5s ease-in-out infinite;
+  }
+  .bug .antenna-r {
+    animation: bug-twitch-r 5.5s ease-in-out 0.12s infinite;
+  }
+  .bug .shell {
+    transition: rotate 0.18s ease-out;
+  }
+  .bug.is-flying .shell-l {
+    rotate: 34deg;
+  }
+  .bug.is-flying .shell-r {
+    rotate: -34deg;
+  }
+  .bug .wing {
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  .bug.is-flying .wing {
+    opacity: 1;
+  }
+  .bug.is-flying .wing-l {
+    animation: bug-flap 0.06s linear infinite alternate;
+  }
+  .bug.is-flying .wing-r {
+    animation: bug-flap-r 0.06s linear infinite alternate;
+  }
+
+  /* The header logo wiggles when you point at it */
+  .logo-link:hover .logo-bug,
+  .logo-link:focus-visible .logo-bug {
+    animation: bug-wobble 0.6s ease-in-out;
+  }
+  .logo-link:hover .logo-bug .antenna,
+  .logo-link:focus-visible .logo-bug .antenna {
+    animation: bug-wiggle 0.2s ease-in-out 3 alternate;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bug *,
+    .logo-bug,
+    .logo-bug * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+@keyframes bug-step {
+  from { rotate: -16deg; }
+  to { rotate: 16deg; }
+}
+@keyframes bug-twitch {
+  0%, 86%, 100% { rotate: 0deg; }
+  89% { rotate: -14deg; }
+  93% { rotate: 7deg; }
+}
+@keyframes bug-twitch-r {
+  0%, 86%, 100% { rotate: 0deg; }
+  89% { rotate: 14deg; }
+  93% { rotate: -7deg; }
+}
+@keyframes bug-flap {
+  from { rotate: 4deg; }
+  to { rotate: 34deg; }
+}
+@keyframes bug-flap-r {
+  from { rotate: -4deg; }
+  to { rotate: -34deg; }
+}
+@keyframes bug-wobble {
+  0%, 100% { rotate: 0deg; }
+  25% { rotate: -12deg; }
+  60% { rotate: 9deg; }
+}
+@keyframes bug-wiggle {
+  from { rotate: -10deg; }
+  to { rotate: 10deg; }
 }
 
 /* Printing the certificate: only the certificate, on one A4 page in landscape */

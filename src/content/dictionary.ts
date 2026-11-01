@@ -15,6 +15,8 @@ const RO = {
     primary: 'Vezi cursurile',
     secondary: 'Cum funcționează certificatul',
     facts: [`Sesiuni live pe ${site.platform}`, `Maximum ${ro(site.maxGroup, 'persoane')} într-o grupă`, 'Certificat cu cod de verificare'],
+    note: 'asta primești la final',
+    bug: 'Buburuza CourseBug: apasă ca să zboare',
   },
   who: {
     title: 'Pentru cine sunt cursurile',
@@ -29,6 +31,7 @@ const RO = {
     lead: 'Trei cursuri scurte, fiecare cu 4 sesiuni live de câte 2 ore și exerciții între sesiuni.',
     details: 'Detalii și înscriere',
     for: 'Pentru',
+    tools: 'Instrumente',
     hours: (n: number) => ro(n, 'ore'),
   },
   steps: {
@@ -84,9 +87,15 @@ const RO = {
   },
   course: {
     back: 'Toate cursurile',
-    skillsTitle: 'Ce vei exersa',
-    programTitle: 'Programul',
+    skillsTitle: 'Competențele de pe certificat',
+    programTitle: 'Programul, sesiune cu sesiune',
     session: (n: number) => `Sesiunea ${n}`,
+    learnTitle: 'Ce înveți',
+    toolsLabel: 'Instrumente',
+    makeLabel: 'Pleci cu',
+    toolsTitle: 'Instrumentele cursului',
+    toolsNote: 'Toate au o variantă gratuită, care ajunge pentru curs.',
+    needsTitle: 'De ce ai nevoie',
     finalTitle: 'Tema finală',
     getTitle: 'Ce primești',
     get: (sessions: number, perSession: number, practice: number) => [
@@ -180,6 +189,8 @@ const EN: Dict = {
     primary: 'See the courses',
     secondary: 'How the certificate works',
     facts: [`Live sessions on ${site.platform}`, `${site.maxGroup} people per group at most`, 'Certificate with a verification code'],
+    note: 'this is what you get at the end',
+    bug: 'The CourseBug ladybug: press to make it fly',
   },
   who: {
     title: 'Who the courses are for',
@@ -194,6 +205,7 @@ const EN: Dict = {
     lead: 'Three short courses, each with 4 live two-hour sessions and practice in between.',
     details: 'Details and enrolment',
     for: 'For',
+    tools: 'Tools',
     hours: (n: number) => `${n} hours`,
   },
   steps: {
@@ -249,9 +261,15 @@ const EN: Dict = {
   },
   course: {
     back: 'All courses',
-    skillsTitle: "What you'll practise",
-    programTitle: 'Programme',
+    skillsTitle: 'The skills on your certificate',
+    programTitle: 'The programme, session by session',
     session: (n: number) => `Session ${n}`,
+    learnTitle: "What you'll learn",
+    toolsLabel: 'Tools',
+    makeLabel: 'You leave with',
+    toolsTitle: 'Tools in this course',
+    toolsNote: 'All of them have a free version, which is enough for the course.',
+    needsTitle: 'What you need',
     finalTitle: 'Final task',
     getTitle: 'What you get',
     get: (sessions: number, perSession: number, practice: number) => [

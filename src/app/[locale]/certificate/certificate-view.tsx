@@ -27,7 +27,7 @@ export function CertificateView({ locale }: { locale: Locale }) {
         <Link href={`${href(locale, 'verify')}?code=${encodeURIComponent(r.code)}`} className="link">
           ← {t.verify.title}
         </Link>
-        <button type="button" onClick={() => window.print()} className="btn btn-board">
+        <button type="button" onClick={() => window.print()} className="btn btn-ink">
           {t.print.print}
         </button>
       </div>

@@ -39,9 +39,9 @@ export function VerifyForm({ locale }: { locale: Locale }) {
           autoCapitalize="characters"
           spellCheck={false}
           aria-invalid={invalid || undefined}
-          className="h-13 w-full rounded-full border-2 border-line bg-card px-5 text-lg font-semibold tracking-wide uppercase placeholder:font-normal placeholder:normal-case placeholder:tracking-normal placeholder:text-ink-soft/70 focus:border-board focus:outline-none"
+          className="h-13 w-full rounded-full border-2 border-line bg-card px-5 text-lg font-semibold tracking-wide uppercase placeholder:font-normal placeholder:normal-case placeholder:tracking-normal placeholder:text-ink-soft/70 focus:border-ink focus:outline-none"
         />
-        <button type="submit" className="btn btn-board h-13 shrink-0 px-7 text-base">
+        <button type="submit" className="btn btn-ink h-13 shrink-0 px-7 text-base">
           {t.verify.button}
         </button>
       </form>

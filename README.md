@@ -14,7 +14,7 @@ Everything about dates and money is in `src/content/catalog.json`. For each cour
 
 Leave them `null` until you know them: the page then says the dates and price are coming soon, and the enrol button opens an email to you with a ready-made message. The bottom of the file has an example.
 
-Your name, email, platform and maximum group size are in `src/content/site.json`. The course texts (titles, skills, programme) are in `src/content/courses.ts`, and every other text on the site is in `src/content/dictionary.ts`, Romanian first, English second.
+Your name, email, platform and maximum group size are in `src/content/site.json`. The course texts are in `src/content/courses.ts`: titles, the skills printed on the certificate, and for each session what participants learn, the tools used and what they leave with, plus the course's tool list and what participants need, and every other text on the site is in `src/content/dictionary.ts`, Romanian first, English second.
 
 ## Issuing a certificate
 

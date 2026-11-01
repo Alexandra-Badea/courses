@@ -6,7 +6,7 @@ const pickLanguage = `(function(){try{var s=localStorage.getItem('lang');var l=(
 
 export default function LanguageRedirect() {
   return (
-    <main className="grid min-h-dvh place-items-center bg-board px-4 text-chalk">
+    <main className="grid-paper grid min-h-dvh place-items-center px-4 text-ink">
       <script dangerouslySetInnerHTML={{ __html: pickLanguage }} />
       <noscript>
         <meta httpEquiv="refresh" content="0; url=/ro/" />
@@ -14,10 +14,10 @@ export default function LanguageRedirect() {
       <div className="text-center">
         <Logo />
         <p className="mt-6 flex justify-center gap-3">
-          <Link href="/ro/" lang="ro" className="btn btn-highlight">
+          <Link href="/ro/" lang="ro" className="btn btn-bug">
             Română
           </Link>
-          <Link href="/en/" lang="en" className="btn bg-chalk text-board">
+          <Link href="/en/" lang="en" className="btn btn-ink">
             English
           </Link>
         </p>

@@ -15,19 +15,19 @@ export function Header({ locale }: { locale: Locale }) {
   ]
 
   return (
-    <header className="sticky top-0 z-40 bg-board text-chalk print:hidden">
-      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-full focus:bg-highlight focus:px-4 focus:py-2 focus:text-highlight-ink">
+    <header className="sticky top-0 z-40 border-b border-line bg-paper/90 text-ink backdrop-blur-md print:hidden">
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-paper">
         {t.nav.skip}
       </a>
       <div className="wrap flex h-16 items-center justify-between gap-4">
-        <Link href={home} className="shrink-0 rounded-lg">
+        <Link href={home} className="logo-link shrink-0 rounded-lg">
           <Logo />
         </Link>
         <nav aria-label={t.nav.menu} className="hidden md:block">
           <ul className="flex items-center gap-6 text-[15px] font-semibold">
             {links.map((l) => (
               <li key={l.to}>
-                <Link href={l.to} className="text-chalk-soft transition-colors hover:text-chalk">
+                <Link href={l.to} className="text-ink-soft underline-offset-[6px] transition-colors hover:text-ink hover:underline hover:decoration-bug hover:decoration-2">
                   {l.label}
                 </Link>
               </li>
@@ -35,8 +35,8 @@ export function Header({ locale }: { locale: Locale }) {
           </ul>
         </nav>
         <div className="flex items-center gap-2 sm:gap-3">
-          <LanguageSwitch locale={locale} label={t.lang.label} />
-          <Link href={`${home}#courses`} className="btn btn-highlight px-3.5 py-2.5 text-sm sm:px-4">
+          <LanguageSwitch locale={locale} label={t.lang.label} tone="ink" />
+          <Link href={`${home}#courses`} className="btn btn-bug px-3.5 py-2.5 text-sm sm:px-4">
             {t.nav.enrol}
           </Link>
         </div>
