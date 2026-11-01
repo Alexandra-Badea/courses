@@ -24,7 +24,15 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 // Written out in full so Tailwind finds the classes
-const noteBg: Record<NoteColour, string> = { yellow: 'bg-note-yellow', pink: 'bg-note-pink', mint: 'bg-note-mint' }
+const noteBg: Record<NoteColour, string> = {
+  yellow: 'bg-note-yellow',
+  pink: 'bg-note-pink',
+  mint: 'bg-note-mint',
+  blue: 'bg-note-blue',
+  peach: 'bg-note-peach',
+  lilac: 'bg-note-lilac',
+}
+const toolId = (name: string) => `tool-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`
 const tilt = (deg: number) => ({ '--tilt': `${deg}deg` }) as CSSProperties
 
 export default async function CoursePage({ params }: { params: Params }) {
@@ -34,6 +42,7 @@ export default async function CoursePage({ params }: { params: Params }) {
   const locale = l as Locale
   const t = getDictionary(locale)
   const colour = noteBg[course.colour]
+  const described = new Set(course.tools.map((tool) => tool.name))
 
   const facts = [
     { k: t.course.facts.audience, v: course.audience[locale] },
@@ -109,8 +118,14 @@ export default async function CoursePage({ params }: { params: Params }) {
                       <h4 className="font-semibold">{t.course.toolsLabel}</h4>
                       <ul className="mt-2.5 flex flex-wrap gap-1.5">
                         {s.tools.map((tool) => (
-                          <li key={tool} className="chip bg-paper">
-                            {tool}
+                          <li key={tool}>
+                            {described.has(tool) ? (
+                              <a href={`#${toolId(tool)}`} className="chip bg-paper underline decoration-ink/25 underline-offset-2 hover:border-ink/40 hover:bg-white hover:decoration-bug">
+                                {tool}
+                              </a>
+                            ) : (
+                              <span className="chip bg-paper">{tool}</span>
+                            )}
                           </li>
                         ))}
                       </ul>
@@ -134,10 +149,10 @@ export default async function CoursePage({ params }: { params: Params }) {
             <h2 id="tools-title" className="text-[2.2rem] sm:text-[2.9rem]">
               {t.course.toolsTitle}
             </h2>
-            <p className="mt-3 text-lg text-ink-soft">{t.course.toolsNote}</p>
+            <p className="mt-3 max-w-2xl text-lg text-ink-soft">{course.toolsNote?.[locale] ?? t.course.toolsNote}</p>
             <dl className="mt-7 grid gap-x-10 gap-y-5 sm:grid-cols-2">
               {course.tools.map((tool) => (
-                <div key={tool.name} className="border-t border-line pt-3">
+                <div key={tool.name} id={toolId(tool.name)} className="tool-entry border-t border-line pt-3">
                   <dt className="font-display text-lg font-bold">{tool.name}</dt>
                   <dd className="mt-1 text-ink-soft">{tool.use[locale]}</dd>
                 </div>

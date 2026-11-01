@@ -2,25 +2,34 @@ import type { CSSProperties } from 'react'
 import Link from 'next/link'
 import site from '@/content/site.json'
 import sample from '../../../public/certificates/CB-EXEMPLU.json'
-import { courses, getCourse } from '@/content/courses'
+import { courses, getCourse, type Audience } from '@/content/courses'
 import { getDictionary } from '@/content/dictionary'
 import { CertificateWithQr } from '@/components/certificate-preview'
 import { HeroLadybug } from '@/components/hero-ladybug'
+import { CourseFilter, type FilterKey } from '@/components/course-filter'
+import { PromptBuilder } from '@/components/prompt-builder'
 import { formatDate, href, isLocale, type Locale } from '@/lib/i18n'
 
 const tilt = (deg: number) => ({ '--tilt': `${deg}deg` }) as CSSProperties
 const tapeAt = (left: string, deg: number) => ({ left, '--tape-tilt': `${deg}deg` }) as CSSProperties
 
 // Dot stickers for lists that aren't a sequence; numbered stickers for the steps, which are
-const dots = ['bg-bug', 'bg-highlight', 'bg-note-mint ring-1 ring-ink/15']
+const dots = ['bg-bug', 'bg-highlight', 'bg-note-mint ring-1 ring-ink/15', 'bg-note-blue ring-1 ring-ink/15']
 const stepStickers = ['bg-bug-ink text-white', 'bg-highlight text-highlight-ink', 'bg-note-mint text-ink', 'bg-ink text-paper']
-const noteTilts = [-1.6, 1.1, -0.7]
+const noteTilts = [-1.6, 1.1, -0.7, 0.9, -1.2, 0.6]
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: l } = await params
   const locale = (isLocale(l) ? l : 'ro') as Locale
   const t = getDictionary(locale)
   const sampleCourse = getCourse(sample.course)!
+  const prompting = getCourse('prompting')
+  const countFor = (a: Audience) => courses.filter((c) => c.audiences.includes(a)).length
+  const filterKeys: FilterKey[] = ['all', 'everyone', 'teachers', 'youth']
+  const filterOptions = filterKeys.map((key) => {
+    const count = key === 'all' ? courses.length : countFor(key)
+    return { key, label: t.courses.filter[key], count, shown: t.courses.filter.shown(count) }
+  })
 
   return (
     <>
@@ -84,11 +93,11 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <h2 id="who-title" className="h2 max-w-3xl">
           {t.who.title}
         </h2>
-        <ul className="mt-10 grid gap-8 md:grid-cols-3 md:gap-10">
+        <ul className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
           {t.who.items.map((w, i) => (
             <li key={w.title}>
               <span aria-hidden="true" className={`dot size-4 ${dots[i % dots.length]}`} />
-              <h3 className="mt-4 text-2xl font-bold">{w.title}</h3>
+              <h3 className="mt-4 text-[1.4rem] font-bold">{w.title}</h3>
               <p className="mt-2 text-ink-soft">{w.text}</p>
             </li>
           ))}
@@ -101,46 +110,75 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <h2 id="courses-title" className="h2">
             {t.courses.title}
           </h2>
-          <p className="mt-3 max-w-2xl text-lg text-ink-soft">{t.courses.lead}</p>
-          <ul className="mt-14 grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
-            {courses.map((c, i) => (
-              <li key={c.slug} className={`note note-${c.colour} flex flex-col px-6 pb-7 pt-9 sm:px-7`} style={tilt(noteTilts[i % noteTilts.length])}>
-                <span aria-hidden="true" className="tape" />
-                <p className="text-sm font-semibold text-ink/75">
-                  {t.courses.for}: {c.audience[locale]}
-                </p>
-                <h3 className="mt-3 text-[1.7rem] font-extrabold leading-[1.05]" style={{ fontStretch: '85%' }}>
-                  <Link href={href(locale, `courses/${c.slug}`)} className="hover:underline hover:decoration-2 hover:underline-offset-4">
-                    {c.title[locale]}
-                  </Link>
-                </h3>
-                <p className="mt-3 text-ink/80">{c.outcome[locale]}</p>
-                <p className="mt-5 text-sm font-semibold text-ink/75">{t.courses.tools}</p>
-                <ul className="mt-2 flex flex-wrap gap-1.5">
-                  {c.tools.map((tool) => (
-                    <li key={tool.name} className="chip">
-                      {tool.name}
-                    </li>
-                  ))}
-                </ul>
-                <dl className="mt-6 grid grid-cols-2 gap-3 border-t border-ink/15 pt-4 text-sm">
-                  <div>
-                    <dt className="text-ink/75">{t.course.facts.format}</dt>
-                    <dd className="font-semibold">{t.course.facts.formatValue(c.sessions, c.hoursPerSession)}</dd>
+          <p className="mt-3 max-w-2xl text-lg text-ink-soft">{t.courses.lead(courses.length)}</p>
+          <CourseFilter label={t.courses.filter.label} options={filterOptions}>
+            <ul className="mt-12 grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
+              {courses.map((c, i) => (
+                <li
+                  key={c.slug}
+                  data-aud={c.audiences.join(' ')}
+                  className={`note note-${c.colour} flex flex-col px-6 pb-7 pt-9 sm:px-7`}
+                  style={{ ...tilt(noteTilts[i % noteTilts.length]), viewTransitionName: `note-${c.slug}` }}
+                >
+                  <span aria-hidden="true" className="tape" />
+                  <p className="text-sm font-semibold text-ink/75">
+                    {t.courses.for}: {c.audience[locale]}
+                  </p>
+                  <h3 className="mt-3 text-[1.7rem] font-extrabold leading-[1.05]" style={{ fontStretch: '85%' }}>
+                    <Link href={href(locale, `courses/${c.slug}`)} className="hover:underline hover:decoration-2 hover:underline-offset-4">
+                      {c.title[locale]}
+                    </Link>
+                  </h3>
+                  <p className="mt-3 text-ink/80">{c.outcome[locale]}</p>
+                  <p className="mt-5 text-sm font-semibold text-ink/75">{t.courses.tools}</p>
+                  <ul className="mt-2 flex flex-wrap gap-1.5">
+                    {c.tools.map((tool) => (
+                      <li key={tool.name} className="chip">
+                        {tool.name}
+                      </li>
+                    ))}
+                  </ul>
+                  <dl className="mt-6 grid grid-cols-2 gap-3 border-t border-ink/15 pt-4 text-sm">
+                    <div>
+                      <dt className="text-ink/75">{t.course.facts.format}</dt>
+                      <dd className="font-semibold">{t.course.facts.formatValue(c.sessions, c.hoursPerSession)}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-ink/75">{t.course.facts.practice}</dt>
+                      <dd className="font-semibold">{t.courses.hours(c.hoursPractice)}</dd>
+                    </div>
+                  </dl>
+                  <div className="mt-auto pt-7">
+                    <Link href={href(locale, `courses/${c.slug}`)} className="btn btn-ink w-full sm:w-auto" aria-label={`${t.courses.details}: ${c.title[locale]}`}>
+                      {t.courses.details}
+                    </Link>
                   </div>
-                  <div>
-                    <dt className="text-ink/75">{t.course.facts.practice}</dt>
-                    <dd className="font-semibold">{t.courses.hours(c.hoursPractice)}</dd>
-                  </div>
-                </dl>
-                <div className="mt-auto pt-7">
-                  <Link href={href(locale, `courses/${c.slug}`)} className="btn btn-ink w-full sm:w-auto" aria-label={`${t.courses.details}: ${c.title[locale]}`}>
-                    {t.courses.details}
-                  </Link>
-                </div>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          </CourseFilter>
+        </div>
+      </section>
+
+      {/* Try it: a small exercise from the prompting course */}
+      <section id="try" className="grid-paper border-b border-line py-16 sm:py-24" aria-labelledby="try-title">
+        <div className="wrap">
+          <h2 id="try-title" className="h2 max-w-3xl">
+            {t.tryIt.title}
+          </h2>
+          <p className="mt-3 max-w-2xl text-lg text-ink-soft">{t.tryIt.lead}</p>
+          <div className="mt-10">
+            <PromptBuilder t={t.tryIt} />
+          </div>
+          {prompting && (
+            <p className="mt-8 text-ink-soft">
+              {t.tryIt.from}{' '}
+              <Link href={href(locale, `courses/${prompting.slug}`)} className="link">
+                {prompting.title[locale].split(':')[0]}
+              </Link>
+              .
+            </p>
+          )}
         </div>
       </section>
 

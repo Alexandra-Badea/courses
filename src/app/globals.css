@@ -34,6 +34,9 @@
   --color-note-yellow: #f7e17c;
   --color-note-pink: #f8c6cf;
   --color-note-mint: #bfe6d2;
+  --color-note-blue: #c6ddf4;
+  --color-note-peach: #f9d2b3;
+  --color-note-lilac: #dcd0f2;
   --color-tape: #e8e0c4;
 
   --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
@@ -160,6 +163,9 @@
   .note-yellow { --note: var(--color-note-yellow); }
   .note-pink { --note: var(--color-note-pink); }
   .note-mint { --note: var(--color-note-mint); }
+  .note-blue { --note: var(--color-note-blue); }
+  .note-peach { --note: var(--color-note-peach); }
+  .note-lilac { --note: var(--color-note-lilac); }
   @media (prefers-reduced-motion: no-preference) {
     .note:hover,
     .note:focus-within {
@@ -191,6 +197,49 @@
     @apply inline-block size-3 shrink-0 rounded-full;
     box-shadow: inset 0 -1px 0 rgb(0 0 0 / 0.12);
   }
+}
+
+/*
+ * The course list, filtered by who it's for: notes that don't match are taken out of the layout.
+ * Outside any layer on purpose, so it wins over the notes' `flex` utility class.
+ */
+.course-board[data-show="everyone"] li[data-aud]:not([data-aud~="everyone"]),
+.course-board[data-show="teachers"] li[data-aud]:not([data-aud~="teachers"]),
+.course-board[data-show="youth"] li[data-aud]:not([data-aud~="youth"]) {
+  display: none;
+}
+
+@layer components {
+  /* A tool in a session links to its description, which lights up for a moment */
+  .tool-entry {
+    scroll-margin-top: 7rem;
+    border-radius: 0.5rem;
+  }
+  .tool-entry:target {
+    background: color-mix(in oklab, var(--color-highlight) 35%, transparent);
+    box-shadow: 0 0 0 0.6rem color-mix(in oklab, var(--color-highlight) 35%, transparent);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .tool-entry:target {
+      animation: tool-flash 2.2s ease-out forwards;
+    }
+  }
+}
+@keyframes tool-flash {
+  0%, 35% {
+    background: color-mix(in oklab, var(--color-highlight) 55%, transparent);
+    box-shadow: 0 0 0 0.6rem color-mix(in oklab, var(--color-highlight) 55%, transparent);
+  }
+  100% {
+    background: transparent;
+    box-shadow: 0 0 0 0.6rem transparent;
+  }
+}
+
+/* Notes slide to their new places when the course filter changes */
+::view-transition-group(*) {
+  animation-duration: 0.38s;
+  animation-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1);
 }
 
 /*

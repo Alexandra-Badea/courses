@@ -25,7 +25,11 @@ export interface Tool {
 }
 
 /** Each course has its own sticky-note colour on the site */
-export type NoteColour = 'yellow' | 'pink' | 'mint'
+export type NoteColour = 'yellow' | 'pink' | 'mint' | 'blue' | 'peach' | 'lilac'
+
+/** Who a course is for; the course list on the home page can be filtered by these */
+export const audiences = ['everyone', 'teachers', 'youth'] as const
+export type Audience = (typeof audiences)[number]
 
 export interface Course {
   slug: string
@@ -36,6 +40,7 @@ export interface Course {
   price: { amount: number; currency: string } | null
   paymentLink: string | null
   colour: NoteColour
+  audiences: Audience[]
   title: Text
   /** What you can do afterwards, in one sentence */
   outcome: Text
@@ -44,6 +49,8 @@ export interface Course {
   skills: List
   program: Session[]
   tools: Tool[]
+  /** Replaces the usual "all of them have a free version" line, when that isn't true for every tool */
+  toolsNote?: Text
   needs: List
   finalTask: Text
 }
@@ -52,8 +59,441 @@ type CourseText = Omit<Course, 'slug' | 'sessions' | 'hoursPerSession' | 'hoursP
 
 /** The words of each course. Numbers, dates, prices and payment links live in catalog.json. */
 const texts: Record<string, CourseText> = {
+  'ai-everyday': {
+    colour: 'blue',
+    audiences: ['everyone'],
+    title: {
+      ro: 'AI de la zero: ChatGPT și Gemini în viața de zi cu zi',
+      en: 'AI from scratch: ChatGPT and Gemini in everyday life',
+    },
+    outcome: {
+      ro: 'Folosești AI cu încredere pentru mesaje, planuri, traduceri, documente și poze, și știi când să nu te bazezi pe el.',
+      en: 'Use AI with confidence for messages, plans, translations, documents and photos, and know when not to rely on it.',
+    },
+    audience: { ro: 'Oricine vrea să înceapă cu AI', en: 'Anyone who wants to start with AI' },
+    skills: {
+      ro: [
+        'Folosirea asistenților AI (ChatGPT, Gemini, Copilot) pe calculator și pe telefon, în scris și cu vocea',
+        'Redactarea, rezumarea și traducerea textelor cu ajutorul AI',
+        'Lucrul cu poze și documente în chat și în NotebookLM',
+        'Verificarea răspunsurilor AI și recunoașterea informațiilor inventate',
+        'Protejarea datelor personale și recunoașterea înșelătoriilor făcute cu AI',
+      ],
+      en: [
+        'Using AI assistants (ChatGPT, Gemini, Copilot) on a computer and a phone, by typing and by voice',
+        'Writing, summarising and translating texts with AI',
+        'Working with photos and documents in the chat and in NotebookLM',
+        'Checking AI answers and recognising made-up information',
+        'Protecting personal data and recognising scams made with AI',
+      ],
+    },
+    program: [
+      {
+        title: { ro: 'Ce este AI și primii pași', en: 'What AI is, and your first steps' },
+        learn: {
+          ro: [
+            'Ce poate și ce nu poate face un chatbot AI, explicat fără termeni tehnici',
+            'Contul în ChatGPT, Gemini sau Copilot, pe calculator și pe telefon',
+            'Prima conversație: cum întrebi, cum ceri o variantă mai bună, cum continui',
+            'Vorbești în loc să scrii: modul vocal și pozele trimise în chat',
+            'Ce nu spui niciodată unui chatbot: parole, date bancare, CNP, lucruri despre alții',
+          ],
+          en: [
+            "What an AI chatbot can and can't do, explained without technical words",
+            'Your account in ChatGPT, Gemini or Copilot, on a computer and a phone',
+            'Your first conversation: how to ask, how to ask for a better version, how to carry on',
+            'Talking instead of typing: voice mode and photos sent in the chat',
+            'What you never tell a chatbot: passwords, bank details, ID numbers, things about other people',
+          ],
+        },
+        tools: ['ChatGPT', 'Gemini', 'Microsoft Copilot'],
+        make: { ro: 'Contul tău pregătit și primele 5 conversații utile.', en: 'Your account set up and your first 5 useful conversations.' },
+      },
+      {
+        title: { ro: 'AI pentru treburile de zi cu zi', en: 'AI for everyday jobs' },
+        learn: {
+          ro: [
+            'E-mailuri și mesaje: scrise de la zero, scurtate, mai politicoase sau mai ferme',
+            'Un document lung, un contract sau o factură, rezumate pe înțelesul tău',
+            'Planuri: meniul săptămânii, o excursie, un buget lunar',
+            'Traduceri, inclusiv din poze, cu Google Lens',
+            'Explicații pe nivelul tău pentru orice vrei să înveți',
+          ],
+          en: [
+            'Emails and messages: written from scratch, shortened, made more polite or firmer',
+            'A long document, a contract or a bill, summed up in plain words',
+            "Plans: the week's meals, a trip, a monthly budget",
+            'Translations, including from photos, with Google Lens',
+            'Explanations at your level for anything you want to learn',
+          ],
+        },
+        tools: ['ChatGPT', 'Gemini', 'Google Lens'],
+        make: { ro: 'O listă cu 10 cereri pe care le vei folosi în fiecare săptămână.', en: "A list of 10 requests you'll use every week." },
+      },
+      {
+        title: { ro: 'Poze, voce și documente', en: 'Pictures, voice and documents' },
+        learn: {
+          ro: [
+            'Imagini create cu AI: felicitări, invitații, ilustrații, și unde greșesc încă',
+            'Întrebări despre o poză: o plantă, o etichetă, un panou într-o limbă străină',
+            'Un PDF încărcat în chat: întrebări, rezumat, lista cu ce ai de făcut',
+            'NotebookLM: un asistent care răspunde doar din documentele tale',
+            'Notițe vocale transformate în text ordonat',
+          ],
+          en: [
+            'Images made with AI: cards, invitations, illustrations, and where they still go wrong',
+            'Questions about a photo: a plant, a label, a sign in another language',
+            'A PDF uploaded to the chat: questions, a summary, a to-do list',
+            'NotebookLM: an assistant that answers only from your own documents',
+            'Voice notes turned into tidy text',
+          ],
+        },
+        tools: ['ChatGPT', 'Gemini', 'NotebookLM'],
+        make: { ro: 'O invitație făcută cu AI și rezumatul unui document al tău.', en: 'An invitation made with AI, and a summary of one of your documents.' },
+      },
+      {
+        title: { ro: 'Cum verifici ce îți spune AI; prezentarea temei finale', en: 'Checking what AI tells you; final task presentations' },
+        learn: {
+          ro: [
+            'De ce AI inventează uneori și cum verifici un răspuns în două minute',
+            'Când nu te bazezi pe AI: sănătate, bani, acte oficiale',
+            'Deepfake-uri și înșelătorii cu voci clonate: cum le recunoști',
+            'Setările de confidențialitate: istoricul conversațiilor și folosirea datelor tale',
+            'Feedback de la ceilalți participanți',
+          ],
+          en: [
+            'Why AI sometimes makes things up, and how to check an answer in two minutes',
+            "When not to rely on AI: health, money, official papers",
+            'Deepfakes and cloned-voice scams: how to recognise them',
+            'Privacy settings: your chat history and how your data is used',
+            'Feedback from the other participants',
+          ],
+        },
+        tools: ['ChatGPT', 'Gemini', 'Google Lens'],
+        make: { ro: 'Regulile tale pentru folosirea AI, pe o pagină.', en: 'Your own rules for using AI, on one page.' },
+      },
+    ],
+    tools: [
+      { name: 'ChatGPT', use: { ro: 'Cel mai folosit asistent AI: întrebări, texte, planuri, poze.', en: 'The most used AI assistant: questions, texts, plans, pictures.' } },
+      { name: 'Gemini', use: { ro: 'Asistentul AI de la Google, cu contul tău Google.', en: "Google's AI assistant, with your Google account." } },
+      { name: 'Microsoft Copilot', use: { ro: 'Asistentul AI de la Microsoft, cu un cont Microsoft.', en: "Microsoft's AI assistant, with a Microsoft account." } },
+      { name: 'NotebookLM', use: { ro: 'Răspunde doar din documentele pe care i le dai.', en: 'Answers only from the documents you give it.' } },
+      { name: 'Google Lens', use: { ro: 'Traduce și explică ce fotografiezi.', en: 'Translates and explains what you photograph.' } },
+    ],
+    needs: {
+      ro: [
+        'Un calculator sau un laptop; telefonul e bun pentru exersat',
+        'Un cont Google sau Microsoft',
+        'Să știi să folosești un browser și emailul; restul îl facem împreună',
+        'Nu ai nevoie de experiență cu AI',
+      ],
+      en: [
+        'A computer or laptop; a phone is good for practice',
+        'A Google or Microsoft account',
+        'To be able to use a web browser and email; we do the rest together',
+        'No experience with AI needed',
+      ],
+    },
+    finalTask: {
+      ro: 'Zece situații din viața ta în care AI te ajută, cu cererile testate și răspunsurile verificate.',
+      en: 'Ten situations from your own life where AI helps, with the requests tested and the answers checked.',
+    },
+  },
+
+  prompting: {
+    colour: 'peach',
+    audiences: ['everyone'],
+    title: {
+      ro: 'Prompturi care funcționează: răspunsuri bune de la AI, din prima',
+      en: 'Prompts that work: good answers from AI, first time',
+    },
+    outcome: {
+      ro: 'Scrii cereri clare, dai AI-ului contextul și exemplele potrivite și îți faci un asistent propriu pentru treburile pe care le repeți.',
+      en: 'Write clear requests, give AI the right context and examples, and set up your own assistant for the jobs you repeat.',
+    },
+    audience: { ro: 'Oricine folosește deja ChatGPT sau Gemini', en: 'Anyone who already uses ChatGPT or Gemini' },
+    skills: {
+      ro: [
+        'Structurarea prompturilor (rol, sarcină, context, format, exemple) în ChatGPT, Gemini și Claude',
+        'Îmbunătățirea răspunsurilor prin conversație: critică, variante, întrebări de clarificare',
+        'Lucrul cu fișiere (PDF, tabele, imagini) în asistenții AI',
+        'Crearea unui asistent AI propriu (Gem în Gemini), cu instrucțiuni și fișiere',
+        'Verificarea surselor și a afirmațiilor din răspunsurile AI',
+      ],
+      en: [
+        'Structuring prompts (role, task, context, format, examples) in ChatGPT, Gemini and Claude',
+        'Improving answers through conversation: critique, variations, clarifying questions',
+        'Working with files (PDFs, spreadsheets, images) in AI assistants',
+        'Building your own AI assistant (a Gem in Gemini) with instructions and files',
+        'Checking the sources and claims in AI answers',
+      ],
+    },
+    program: [
+      {
+        title: { ro: 'Ce face un prompt bun', en: 'What makes a good prompt' },
+        learn: {
+          ro: [
+            'Rolul, sarcina, contextul, formatul și limitele: ce schimbă fiecare în răspuns',
+            'Exemple în prompt: unul, mai multe sau un model de urmat',
+            'Sarcinile complicate, împărțite în pași',
+            'Aceeași cerere în ChatGPT, Gemini și Claude: ce diferă',
+            'Cum compari răspunsurile și îl alegi pe cel bun',
+          ],
+          en: [
+            'Role, task, context, format and limits: what each one changes in the answer',
+            'Examples in the prompt: one, several, or a model to follow',
+            'Complicated tasks, broken into steps',
+            'The same request in ChatGPT, Gemini and Claude: what differs',
+            'How to compare answers and pick the good one',
+          ],
+        },
+        tools: ['ChatGPT', 'Gemini', 'Claude'],
+        make: { ro: 'Un șablon de prompt pe care îl refolosești.', en: 'A prompt template you can reuse.' },
+      },
+      {
+        title: { ro: 'Conversații, nu întrebări izolate', en: 'Conversations, not one-off questions' },
+        learn: {
+          ro: [
+            'Cum îmbunătățești un răspuns: critică, variante, „pune-mi întâi întrebări”',
+            'Ton și stil: textul să sune ca tine, nu ca un robot',
+            'Formatul pe care îl vrei: tabel, listă, e-mail, scenariu',
+            'Fișierele tale în chat: PDF-uri, tabele, poze',
+            'Când începi o conversație nouă și de ce',
+          ],
+          en: [
+            "How to improve an answer: critique, variations, 'ask me questions first'",
+            'Tone and style: text that sounds like you, not like a robot',
+            'The format you want: a table, a list, an email, a script',
+            'Your own files in the chat: PDFs, spreadsheets, photos',
+            'When to start a new conversation, and why',
+          ],
+        },
+        tools: ['ChatGPT', 'Gemini', 'Claude'],
+        make: { ro: 'Un text important al tău, rescris cu AI în trei variante.', en: 'An important text of yours, rewritten with AI in three versions.' },
+      },
+      {
+        title: { ro: 'Asistentul tău propriu', en: 'Your own assistant' },
+        learn: {
+          ro: [
+            'Instrucțiunile personalizate: AI-ul știe cine ești și cum vrei răspunsurile',
+            'Un Gem în Gemini pentru o sarcină pe care o repeți: instrucțiuni, fișiere, teste',
+            'GPT-urile din ChatGPT și Proiectele din Claude: ce sunt și când merită',
+            'NotebookLM pentru răspunsuri doar din documentele tale',
+            'Biblioteca ta de prompturi: unde le păstrezi și cum le refolosești',
+          ],
+          en: [
+            'Custom instructions: AI knows who you are and how you want answers',
+            'A Gem in Gemini for a job you repeat: instructions, files, testing',
+            "ChatGPT's GPTs and Claude's Projects: what they are and when they're worth it",
+            'NotebookLM for answers drawn only from your own documents',
+            'Your prompt library: where to keep prompts and how to reuse them',
+          ],
+        },
+        tools: ['Gemini', 'ChatGPT', 'NotebookLM'],
+        make: { ro: 'Un asistent propriu (Gem) pentru o sarcină din munca sau viața ta.', en: 'Your own assistant (a Gem) for a job from your work or life.' },
+      },
+      {
+        title: { ro: 'Surse, verificare și limite; prezentarea temei finale', en: 'Sources, checking and limits; final task presentations' },
+        learn: {
+          ro: [
+            'Cum ceri surse și cum verifici dacă spun ce susține AI',
+            'Căutarea cu AI, cu linkuri: Perplexity și căutarea din ChatGPT',
+            'Răspunsuri părtinitoare sau prea sigure pe ele: cum le prinzi',
+            'Ce date nu pui niciodată într-un prompt',
+            'Feedback de la ceilalți participanți',
+          ],
+          en: [
+            'How to ask for sources and check that they say what AI claims',
+            'Searching with AI, with links: Perplexity and ChatGPT search',
+            'Biased or overconfident answers: how to catch them',
+            'What data you never put in a prompt',
+            'Feedback from the other participants',
+          ],
+        },
+        tools: ['Perplexity', 'ChatGPT', 'Gemini'],
+        make: { ro: 'Biblioteca ta de prompturi testate, gata de folosit.', en: 'Your library of tested prompts, ready to use.' },
+      },
+    ],
+    tools: [
+      { name: 'ChatGPT', use: { ro: 'Asistentul AI pe care îl folosesc cei mai mulți.', en: 'The AI assistant most people use.' } },
+      { name: 'Gemini', use: { ro: 'Asistentul Google; aici îți faci Gem-ul.', en: "Google's assistant; where you build your Gem." } },
+      { name: 'Claude', use: { ro: 'Al treilea asistent, bun pentru texte lungi și documente.', en: 'A third assistant, good with long texts and documents.' } },
+      { name: 'NotebookLM', use: { ro: 'Răspunde doar din documentele pe care i le dai.', en: 'Answers only from the documents you give it.' } },
+      { name: 'Perplexity', use: { ro: 'Căutare cu AI, cu sursele afișate.', en: 'AI search that shows its sources.' } },
+    ],
+    needs: {
+      ro: [
+        'Un calculator sau un laptop',
+        'Un cont Google (pentru Gemini și NotebookLM)',
+        'Să fi folosit măcar de câteva ori ChatGPT sau Gemini',
+        'Câteva sarcini din munca sau viața ta pe care vrei să le faci mai repede',
+      ],
+      en: [
+        'A computer or laptop',
+        'A Google account (for Gemini and NotebookLM)',
+        'To have used ChatGPT or Gemini at least a few times',
+        'A few jobs from your work or life you want to do faster',
+      ],
+    },
+    finalTask: {
+      ro: 'O bibliotecă de 15 prompturi testate pentru munca sau viața ta și un asistent propriu care face una dintre sarcini.',
+      en: 'A library of 15 tested prompts for your work or life, and your own assistant that does one of the jobs.',
+    },
+  },
+
+  'ai-at-work': {
+    colour: 'lilac',
+    audiences: ['everyone'],
+    title: {
+      ro: 'AI la birou: e-mailuri, tabele, prezentări și ședințe, mai repede',
+      en: 'AI at work: emails, spreadsheets, slides and meetings, faster',
+    },
+    outcome: {
+      ro: 'Folosești Copilot, Gemini și ChatGPT în munca de zi cu zi și automatizezi o sarcină repetitivă, fără să pui în pericol datele firmei.',
+      en: 'Use Copilot, Gemini and ChatGPT in your daily work and automate a repetitive task, without putting company data at risk.',
+    },
+    audience: { ro: 'Angajați, antreprenori și liber-profesioniști', en: 'Employees, business owners and freelancers' },
+    skills: {
+      ro: [
+        'Redactarea și rezumarea e-mailurilor și documentelor de lucru cu Copilot, Gemini și ChatGPT',
+        'Scrierea de formule, curățarea și analiza datelor în Excel și Google Sheets cu ajutorul AI',
+        'Realizarea de prezentări și rezumate de ședință cu AI',
+        'Automatizarea unei sarcini repetitive fără programare (Zapier sau Make)',
+        'Folosirea responsabilă a AI cu datele firmei (GDPR, AI Act)',
+      ],
+      en: [
+        'Writing and summarising work emails and documents with Copilot, Gemini and ChatGPT',
+        'Writing formulas, cleaning and analysing data in Excel and Google Sheets with AI',
+        'Making presentations and meeting summaries with AI',
+        'Automating a repetitive task without coding (Zapier or Make)',
+        'Using AI responsibly with company data (GDPR, AI Act)',
+      ],
+    },
+    program: [
+      {
+        title: { ro: 'E-mailuri, documente și rapoarte', en: 'Emails, documents and reports' },
+        learn: {
+          ro: [
+            'Răspunsuri la e-mailuri, oferte și mesaje dificile, în tonul firmei',
+            'Rapoarte și documente pornind de la notițele tale',
+            'Copilot în Word și Outlook, Gemini în Gmail și Docs: ce face fiecare',
+            'Rezumatul unui document lung și compararea a două versiuni',
+            'Șabloane pentru textele pe care le scrii des',
+          ],
+          en: [
+            "Replies to emails, quotes and difficult messages, in your company's tone",
+            'Reports and documents built from your notes',
+            'Copilot in Word and Outlook, Gemini in Gmail and Docs: what each one does',
+            'Summing up a long document and comparing two versions',
+            'Templates for the texts you write often',
+          ],
+        },
+        tools: ['Microsoft Copilot', 'Gemini', 'ChatGPT'],
+        make: { ro: 'Șabloane AI pentru e-mailurile și rapoartele pe care le scrii des.', en: 'AI templates for the emails and reports you write often.' },
+      },
+      {
+        title: { ro: 'Tabele și date', en: 'Spreadsheets and data' },
+        learn: {
+          ro: [
+            'Formule scrise și explicate de AI, în Excel și Google Sheets',
+            'Date curățate: dubluri, formate diferite, coloane de împărțit',
+            'Analiză rapidă: tabele pivot, grafice și ce se vede din ele',
+            'Un tabel încărcat în ChatGPT pentru analiză, și cum verifici rezultatul',
+            'Ce date nu încarci niciodată',
+          ],
+          en: [
+            'Formulas written and explained by AI, in Excel and Google Sheets',
+            'Cleaned-up data: duplicates, mixed formats, columns to split',
+            'Quick analysis: pivot tables, charts and what they show',
+            'A spreadsheet uploaded to ChatGPT for analysis, and how to check the result',
+            'What data you never upload',
+          ],
+        },
+        tools: ['Excel', 'Google Sheets', 'ChatGPT'],
+        make: { ro: 'Un tabel din munca ta, curățat și analizat, cu un grafic.', en: 'A spreadsheet from your work, cleaned and analysed, with a chart.' },
+      },
+      {
+        title: { ro: 'Prezentări, ședințe și imagini', en: 'Slides, meetings and images' },
+        learn: {
+          ro: [
+            'O prezentare pornind de la un document, în Canva sau PowerPoint',
+            'Notițe de ședință: din transcriere într-un rezumat cu sarcini și termene',
+            'NotebookLM pentru documentele unui proiect: întrebări, rezumate, ghid',
+            'Imagini și grafice pentru postări și materiale',
+            'Cum păstrezi identitatea vizuală a firmei',
+          ],
+          en: [
+            'A presentation built from a document, in Canva or PowerPoint',
+            'Meeting notes: from a transcript to a summary with tasks and deadlines',
+            "NotebookLM for a project's documents: questions, summaries, a briefing",
+            'Images and charts for posts and materials',
+            "How to keep the company's visual identity",
+          ],
+        },
+        tools: ['Canva', 'PowerPoint', 'NotebookLM'],
+        make: { ro: 'O prezentare de 10 slide-uri pornind de la un document al tău.', en: 'A 10-slide presentation built from one of your documents.' },
+      },
+      {
+        title: { ro: 'Automatizări, agenți și regulile firmei; prezentarea temei finale', en: 'Automation, agents and company rules; final task presentations' },
+        learn: {
+          ro: [
+            'Ce sunt agenții AI și ce pot face azi, realist',
+            'O sarcină repetitivă automatizată fără programare, cu Zapier sau Make',
+            'Datele firmei: ce ai voie să pui într-un AI și ce variante există pentru firme',
+            'GDPR și AI Act, pe scurt: ce contează pentru cine folosește AI la muncă',
+            'Feedback de la ceilalți participanți',
+          ],
+          en: [
+            'What AI agents are and what they can really do today',
+            'A repetitive task automated without coding, with Zapier or Make',
+            'Company data: what you may put into an AI, and the business versions',
+            'GDPR and the AI Act, briefly: what matters if you use AI at work',
+            'Feedback from the other participants',
+          ],
+        },
+        tools: ['Zapier', 'Make', 'Microsoft Copilot'],
+        make: { ro: 'O automatizare care face în locul tău o sarcină repetitivă.', en: 'An automation that does a repetitive task for you.' },
+      },
+    ],
+    tools: [
+      { name: 'Microsoft Copilot', use: { ro: 'Asistentul AI de la Microsoft, și în Word, Excel, PowerPoint și Outlook.', en: "Microsoft's AI assistant, also inside Word, Excel, PowerPoint and Outlook." } },
+      { name: 'Gemini', use: { ro: 'Asistentul AI de la Google, și în Gmail, Docs și Sheets.', en: "Google's AI assistant, also inside Gmail, Docs and Sheets." } },
+      { name: 'ChatGPT', use: { ro: 'Texte, analiză de tabele, idei.', en: 'Texts, spreadsheet analysis, ideas.' } },
+      { name: 'Excel', use: { ro: 'Tabele și formule, cu ajutorul AI.', en: 'Spreadsheets and formulas, with help from AI.' } },
+      { name: 'Google Sheets', use: { ro: 'Același lucru, în varianta Google.', en: 'The same, the Google way.' } },
+      { name: 'PowerPoint', use: { ro: 'Prezentări pornind de la documente.', en: 'Presentations built from documents.' } },
+      { name: 'Canva', use: { ro: 'Prezentări și imagini, cu variantă gratuită.', en: 'Presentations and images, with a free version.' } },
+      { name: 'NotebookLM', use: { ro: 'Răspunde doar din documentele proiectului.', en: "Answers only from the project's documents." } },
+      { name: 'Zapier', use: { ro: 'Automatizări între aplicații, fără cod.', en: 'Automations between apps, without code.' } },
+      { name: 'Make', use: { ro: 'Automatizări vizuale, pas cu pas.', en: 'Visual automations, step by step.' } },
+    ],
+    toolsNote: {
+      ro: 'ChatGPT, Gemini, Copilot, NotebookLM, Canva, Zapier și Make au variante gratuite. AI-ul din Word, Excel, PowerPoint, Outlook, Gmail și Docs vine cu unele abonamente Microsoft 365 și Google Workspace; îți arăt ce poți face cu ele și fără ele.',
+      en: 'ChatGPT, Gemini, Copilot, NotebookLM, Canva, Zapier and Make have free versions. The AI inside Word, Excel, PowerPoint, Outlook, Gmail and Docs comes with some Microsoft 365 and Google Workspace plans; I show you what you can do with and without them.',
+    },
+    needs: {
+      ro: [
+        'Un laptop sau un calculator',
+        'Contul de la serviciu (Microsoft 365 sau Google Workspace), dacă îl ai, sau unul personal',
+        'Câteva documente și tabele de lucru, fără date confidențiale',
+        'Nu ai nevoie de cunoștințe tehnice',
+      ],
+      en: [
+        'A laptop or computer',
+        'Your work account (Microsoft 365 or Google Workspace) if you have one, or a personal one',
+        'A few work documents and spreadsheets, without confidential data',
+        'No technical knowledge needed',
+      ],
+    },
+    finalTask: {
+      ro: 'Trei sarcini din munca ta făcute cu AI (un e-mail-tip, un tabel analizat și o automatizare), cu timpul economisit la fiecare.',
+      en: 'Three tasks from your own work done with AI (a template email, an analysed spreadsheet and an automation), with the time each one saves.',
+    },
+  },
+
   'ai-teaching': {
     colour: 'yellow',
+    audiences: ['teachers'],
     title: {
       ro: 'AI la clasă: lecții, fișe și teste pregătite mai repede',
       en: 'AI in the classroom: lessons, worksheets and tests, faster',
@@ -197,6 +637,7 @@ const texts: Record<string, CourseText> = {
 
   'interactive-lessons': {
     colour: 'pink',
+    audiences: ['teachers', 'youth'],
     title: {
       ro: 'Lecții interactive cu Canva, Padlet, quizuri și jocuri',
       en: 'Interactive lessons with Canva, Padlet, quizzes and games',
@@ -339,6 +780,7 @@ const texts: Record<string, CourseText> = {
 
   'online-safety': {
     colour: 'mint',
+    audiences: ['youth', 'teachers'],
     title: {
       ro: 'Siguranță online și AI în lucrul cu tinerii',
       en: 'Online safety and AI in youth work',

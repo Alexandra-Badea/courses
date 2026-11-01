@@ -32,7 +32,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   if (!isLocale(locale)) notFound()
 
   return (
-    <html lang={locale}>
+    <html lang={locale} data-scroll-behavior="smooth">
       <body className="flex min-h-dvh flex-col">
         <Header locale={locale as Locale} />
         <main id="main" className="flex-1">

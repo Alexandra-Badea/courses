@@ -2,6 +2,33 @@
   "_help": "One entry per course. Fill nextGroup, price and paymentLink when a group opens; leave them null until then. Dates are YYYY-MM-DD. paymentLink can be a Stripe Payment Link; without one, the enrol button opens an email to you.",
   "courses": [
     {
+      "slug": "ai-everyday",
+      "sessions": 4,
+      "hoursPerSession": 2,
+      "hoursPractice": 4,
+      "nextGroup": null,
+      "price": null,
+      "paymentLink": null
+    },
+    {
+      "slug": "prompting",
+      "sessions": 4,
+      "hoursPerSession": 2,
+      "hoursPractice": 4,
+      "nextGroup": null,
+      "price": null,
+      "paymentLink": null
+    },
+    {
+      "slug": "ai-at-work",
+      "sessions": 4,
+      "hoursPerSession": 2,
+      "hoursPractice": 4,
+      "nextGroup": null,
+      "price": null,
+      "paymentLink": null
+    },
+    {
       "slug": "ai-teaching",
       "sessions": 4,
       "hoursPerSession": 2,
@@ -33,9 +60,15 @@
     "nextGroup": {
       "start": "2026-12-01",
       "end": "2026-12-10",
-      "schedule": { "ro": "marți și joi, 18:00–20:00", "en": "Tuesdays and Thursdays, 6–8 pm (Romanian time)" }
+      "schedule": {
+        "ro": "marți și joi, 18:00–20:00",
+        "en": "Tuesdays and Thursdays, 6–8 pm (Romanian time)"
+      }
     },
-    "price": { "amount": 250, "currency": "RON" },
+    "price": {
+      "amount": 250,
+      "currency": "RON"
+    },
     "paymentLink": "https://buy.stripe.com/..."
   }
 }

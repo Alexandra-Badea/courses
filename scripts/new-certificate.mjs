@@ -7,7 +7,7 @@
  *   npm run certificate -- --name "Maria Popescu" --course ai-teaching --start 2026-12-01 --end 2026-12-10
  *
  * Optional: --issued 2026-12-11 (default: today), --url https://your-domain (for the printed links)
- * Courses: see src/content/catalog.json (ai-teaching, interactive-lessons, online-safety)
+ * Courses: see src/content/catalog.json for the slugs (ai-everyday, prompting, ai-at-work, ai-teaching, ...)
  */
 import { randomInt } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'

@@ -11,8 +11,8 @@ const REST_ANGLE = -28
  * The ladybug in the hero. Once the certificate is in view it walks in from the bottom-left,
  * across the certificate, and settles on the tape at its top-right corner; pressing it makes it
  * fly a loop and land there again. With reduced motion it simply sits on the tape, and pressing it
- * opens its wings in place. It finds its spot through [data-perch] inside its parent, which must be
- * position: relative.
+ * opens its wings in place. Once it has landed it turns to look at the mouse pointer when it comes
+ * near. It finds its spot through [data-perch] inside its parent, which must be position: relative.
  */
 export function HeroLadybug({ label }: { label: string }) {
   const button = useRef<HTMLButtonElement>(null)
@@ -134,6 +134,38 @@ export function HeroLadybug({ label }: { label: string }) {
     return () => ro.disconnect()
   }, [place, restPoint])
 
+  // Once it has landed, it turns to look at the pointer when the pointer comes close
+  useEffect(() => {
+    const el = button.current
+    const parent = el?.parentElement
+    if (!el || !parent || reduced() || !window.matchMedia('(hover: hover)').matches) return
+    let frame = 0
+    let pointer: Point | null = null
+    const look = () => {
+      frame = 0
+      if (!pointer || busy.current || !arrived.current) return
+      const box = parent.getBoundingClientRect()
+      const dx = pointer.x - (box.left + pos.current.x)
+      const dy = pointer.y - (box.top + pos.current.y)
+      const distance = Math.hypot(dx, dy)
+      if (distance < size() * 0.6) return // over the bug itself: keep still so it can be pressed
+      const target = distance < 340 ? (Math.atan2(dy, dx) * 180) / Math.PI + 90 : REST_ANGLE
+      const angle = unwrap(pos.current.angle, target)
+      if (Math.abs(angle - pos.current.angle) < 2) return
+      el.style.transition = 'transform 0.4s ease-out'
+      place({ x: pos.current.x, y: pos.current.y, angle })
+    }
+    const onMove = (e: PointerEvent) => {
+      pointer = { x: e.clientX, y: e.clientY }
+      if (!frame) frame = requestAnimationFrame(look)
+    }
+    window.addEventListener('pointermove', onMove, { passive: true })
+    return () => {
+      window.removeEventListener('pointermove', onMove)
+      cancelAnimationFrame(frame)
+    }
+  }, [place])
+
   const fly = () => {
     const el = button.current
     const parent = el?.parentElement
@@ -164,6 +196,7 @@ export function HeroLadybug({ label }: { label: string }) {
     )
     busy.current = true
     arrived.current = true
+    el.style.transition = ''
     bug.current?.classList.add('is-flying')
     const frames = framesAlong(path, size(), 1.45, pos.current.angle)
     const anim = el.animate(frames.keyframes, { duration: 2600, easing: 'cubic-bezier(.4,0,.3,1)', fill: 'forwards' })
