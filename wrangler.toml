@@ -4,6 +4,12 @@
 name = "courses"
 compatibility_date = "2026-02-02"
 
+# The site's addresses. On deploy, Cloudflare creates their DNS records and HTTPS certificates.
+routes = [
+  { pattern = "coursebug.com", custom_domain = true },
+  { pattern = "www.coursebug.com", custom_domain = true },
+]
+
 [assets]
 directory = "./out"
 not_found_handling = "404-page"
