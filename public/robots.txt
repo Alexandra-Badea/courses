@@ -2,3 +2,5 @@ User-agent: *
 Disallow: /certificates/
 Disallow: /ro/certificate/
 Disallow: /en/certificate/
+
+Sitemap: https://coursebug.com/sitemap.xml
