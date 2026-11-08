@@ -15,6 +15,12 @@ export function Footer({ locale }: { locale: Locale }) {
           <p className="text-sm text-ink-soft">
             © {site.year} {site.trainer}. {t.footer.rights}
           </p>
+          <p className="text-sm text-ink-soft">
+            {t.footer.madeBy}{' '}
+            <a href="https://pagesbyalexa.com" className="link">
+              Pages by Alexa
+            </a>
+          </p>
         </div>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
           <Link href={href(locale, 'verify')} className="link">

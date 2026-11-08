@@ -227,7 +227,7 @@ const RO = {
     loading: 'Se încarcă certificatul…',
     missing: 'Lipsește codul certificatului din adresă.',
   },
-  footer: { rights: 'Toate drepturile rezervate.', verify: 'Verifică un certificat' },
+  footer: { rights: 'Toate drepturile rezervate.', verify: 'Verifică un certificat', madeBy: 'Site realizat de' },
   notFound: { title: 'Pagina nu există', text: 'Poate a fost mutată sau adresa are o greșeală.', home: 'Înapoi la cursuri' },
 }
 
@@ -459,7 +459,7 @@ const EN: Dict = {
     loading: 'Loading the certificate…',
     missing: 'The certificate code is missing from the address.',
   },
-  footer: { rights: 'All rights reserved.', verify: 'Check a certificate' },
+  footer: { rights: 'All rights reserved.', verify: 'Check a certificate', madeBy: 'Site by' },
   notFound: { title: "This page doesn't exist", text: 'It may have moved, or the address has a typo.', home: 'Back to the courses' },
 }
 
