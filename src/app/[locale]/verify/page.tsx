@@ -7,7 +7,10 @@ import { VerifyForm } from './verify-form'
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   if (!isLocale(locale)) return {}
-  return { title: getDictionary(locale).verify.title }
+  return {
+    title: getDictionary(locale).verify.title,
+    alternates: { canonical: `/${locale}/verify/`, languages: { ro: '/ro/verify/', en: '/en/verify/' } },
+  }
 }
 
 export default async function VerifyPage({ params }: { params: Promise<{ locale: string }> }) {

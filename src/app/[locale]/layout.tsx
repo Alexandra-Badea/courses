@@ -18,9 +18,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (!isLocale(locale)) return {}
   const t = getDictionary(locale)
   return {
+    // Addresses below are on coursebug.com, whichever copy of the site serves the page, so search
+    // engines treat coursebug.com as the one real site
+    metadataBase: new URL('https://coursebug.com'),
     title: { default: t.meta.title, template: `%s | ${t.meta.title.split(':')[0]}` },
     description: t.meta.description,
-    alternates: { languages: { ro: '/ro/', en: '/en/' } },
+    alternates: { canonical: `/${locale}/`, languages: { ro: '/ro/', en: '/en/', 'x-default': '/ro/' } },
     icons: { icon: '/icon.svg' },
   }
 }

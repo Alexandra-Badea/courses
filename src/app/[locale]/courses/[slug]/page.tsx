@@ -20,7 +20,13 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { locale, slug } = await params
   const course = getCourse(slug)
   if (!course || !isLocale(locale)) return {}
-  return { title: course.title[locale], description: course.outcome[locale] }
+  const path = (l: string) => `/${l}/courses/${slug}/`
+  return {
+    title: course.title[locale],
+    description: course.outcome[locale],
+    // This course's own address and its other language (not the home pages from the layout)
+    alternates: { canonical: path(locale), languages: { ro: path('ro'), en: path('en'), 'x-default': path('ro') } },
+  }
 }
 
 // Written out in full so Tailwind finds the classes
